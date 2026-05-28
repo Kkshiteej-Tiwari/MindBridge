@@ -128,16 +128,16 @@
     },
     {
       "id": "a3fa2f52a25142c38f87316bec5c7335",
-      "content": "Write about your day!",
+      "content": "I feel exhausted and hopeless about exam\ns.",
       "createdAt": "2026-05-28T09:18:55.953410+00:00",
-      "updatedAt": "2026-05-28T09:18:55.953410+00:00",
+      "updatedAt": "2026-05-28T11:26:19.170248+00:00",
       "analysis": {
-        "mood": "neutral",
-        "subject": "Your day!",
-        "summary": "Write about your day!",
-        "color": "#F7B731",
-        "sentimentScore": 0,
-        "negative": false
+        "mood": "distressed",
+        "subject": "Exam",
+        "summary": "I feel exhausted and hopeless about exam\ns.",
+        "color": "#F97316",
+        "sentimentScore": -5,
+        "negative": true
       }
     }
   ]

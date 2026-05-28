@@ -1,0 +1,389 @@
+{
+  "sessions": [
+    {
+      "id": "6ff800ba655d472cb7e49374d03a5ab5",
+      "createdAt": "2026-05-28T11:08:42.759639+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "i have to go to dentist today",
+          "tags": [],
+          "createdAt": "2026-05-28T11:08:42.780748+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "That makes sense. You are not alone in this. What would feel like a gentle next step for you right now?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:08:42.799783+00:00"
+        },
+        {
+          "role": "user",
+          "content": "i am feeling a lil bit odd when dentist touch my teeth",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:07.556773+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:07.571255+00:00"
+        },
+        {
+          "role": "user",
+          "content": "ye",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:11.948579+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:11.964712+00:00"
+        },
+        {
+          "role": "user",
+          "content": "this only",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:21.448762+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:21.465126+00:00"
+        },
+        {
+          "role": "user",
+          "content": "what should i do",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:26.151416+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:26.175518+00:00"
+        },
+        {
+          "role": "user",
+          "content": "part in what sense",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:38.192473+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:38.203930+00:00"
+        },
+        {
+          "role": "user",
+          "content": "I need to breathe and reset.",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:42.597312+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "That makes sense. You are not alone in this. What would feel like a gentle next step for you right now?",
+          "tags": [
+            "Breathing"
+          ],
+          "createdAt": "2026-05-28T11:09:42.614540+00:00"
+        },
+        {
+          "role": "user",
+          "content": "brething",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:56.039329+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:09:56.048188+00:00"
+        },
+        {
+          "role": "user",
+          "content": "yes",
+          "tags": [],
+          "createdAt": "2026-05-28T11:10:00.688929+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:10:00.707356+00:00"
+        },
+        {
+          "role": "user",
+          "content": "breathing",
+          "tags": [],
+          "createdAt": "2026-05-28T11:10:07.158784+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [
+            "Breathing"
+          ],
+          "createdAt": "2026-05-28T11:10:07.180943+00:00"
+        }
+      ]
+    },
+    {
+      "id": "7aa33c503ad44a2f887f5368144beaae",
+      "createdAt": "2026-05-28T11:16:03.526813+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I am stressed about exams.",
+          "tags": [],
+          "createdAt": "2026-05-28T11:16:03.550879+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [
+            "Study",
+            "Stress"
+          ],
+          "createdAt": "2026-05-28T11:16:03.556339+00:00"
+        },
+        {
+          "role": "user",
+          "content": "stress",
+          "tags": [],
+          "createdAt": "2026-05-28T11:16:13.101702+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [
+            "Stress"
+          ],
+          "createdAt": "2026-05-28T11:16:13.116841+00:00"
+        },
+        {
+          "role": "user",
+          "content": "stres",
+          "tags": [],
+          "createdAt": "2026-05-28T11:16:17.230975+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "That makes sense. You are not alone in this. What would feel like a gentle next step for you right now?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:16:17.244920+00:00"
+        }
+      ]
+    },
+    {
+      "id": "af0ba02d94884f009b6fd174b8e3a111",
+      "createdAt": "2026-05-28T11:19:05.702475+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "i want to hurt myself",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:05.729684+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I am really sorry you are feeling this way. You deserve support. If you are in immediate danger or thinking about self harm, please contact local emergency services or a trusted person now.",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:05.756088+00:00"
+        },
+        {
+          "role": "user",
+          "content": "there is no one in local",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:15.136541+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:15.161577+00:00"
+        },
+        {
+          "role": "user",
+          "content": "yes",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:19.410051+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:19.432836+00:00"
+        },
+        {
+          "role": "user",
+          "content": "yes",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:24.837261+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:24.855355+00:00"
+        },
+        {
+          "role": "user",
+          "content": "breathing",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:33.685187+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [
+            "Breathing"
+          ],
+          "createdAt": "2026-05-28T11:19:33.705233+00:00"
+        },
+        {
+          "role": "user",
+          "content": "brething",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:40.805707+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:19:40.827533+00:00"
+        }
+      ]
+    },
+    {
+      "id": "4d8d3a4681564ef6b5c731b04c2e7b54",
+      "createdAt": "2026-05-28T11:21:55.271466+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "i am going to hurt myself",
+          "tags": [],
+          "createdAt": "2026-05-28T11:21:55.293578+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I am really sorry you are feeling this way. You deserve support. If you are in immediate danger or thinking about self harm, please contact local emergency services or a trusted person now.",
+          "tags": [],
+          "createdAt": "2026-05-28T11:21:55.309025+00:00"
+        },
+        {
+          "role": "user",
+          "content": "i have no phone",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:03.176166+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thanks for letting me know. Would you like a grounding exercise or a planning step?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:03.198162+00:00"
+        },
+        {
+          "role": "user",
+          "content": "yes",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:06.302516+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Got it. What would feel like a gentle next step right now?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:06.315823+00:00"
+        },
+        {
+          "role": "user",
+          "content": "that i get relief from this pain",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:17.928508+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:17.945416+00:00"
+        },
+        {
+          "role": "user",
+          "content": "yes i want to try small breathing exercise",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:30.808064+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Let us do a short box breathing reset: inhale 4, hold 4, exhale 4, hold 4. Repeat four rounds and tell me how it feels.",
+          "tags": [
+            "Breathing"
+          ],
+          "createdAt": "2026-05-28T11:22:30.831669+00:00"
+        },
+        {
+          "role": "user",
+          "content": "it feels nice noe",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:38.129839+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "That makes sense. You are not alone in this. What would feel like a gentle next step for you right now?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:38.154971+00:00"
+        },
+        {
+          "role": "user",
+          "content": "i dont knoe about next step you tell me what to do",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:52.820979+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thanks for letting me know. Would you like a grounding exercise or a planning step?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:52.839153+00:00"
+        },
+        {
+          "role": "user",
+          "content": "planning step",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:59.333552+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:22:59.357050+00:00"
+        },
+        {
+          "role": "user",
+          "content": "okay",
+          "tags": [],
+          "createdAt": "2026-05-28T11:23:09.655340+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Let us do a short box breathing reset: inhale 4, hold 4, exhale 4, hold 4. Repeat four rounds and tell me how it feels.",
+          "tags": [],
+          "createdAt": "2026-05-28T11:23:09.668615+00:00"
+        },
+        {
+          "role": "user",
+          "content": "it feels amazing",
+          "tags": [],
+          "createdAt": "2026-05-28T11:23:17.170946+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:23:17.196834+00:00"
+        }
+      ]
+    }
+  ]
+}

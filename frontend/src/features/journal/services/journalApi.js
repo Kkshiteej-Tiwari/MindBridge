@@ -5,7 +5,7 @@ export async function fetchEntries() {
   return payload.data;
 }
 
-export async function createEntry(content = "Write about your day!") {
+export async function createEntry(content = "") {
   const payload = await request("/journal", {
     method: "POST",
     body: JSON.stringify({ content }),

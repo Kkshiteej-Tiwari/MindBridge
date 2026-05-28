@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { sendCoachMessage } from "./services/coachApi";
 
@@ -24,15 +24,37 @@ const createId = () => {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 };
 
+function TypingDots({ tone = "ink" }) {
+  const dotClass = tone === "cream" ? "bg-cream/70" : "bg-ink/50";
+
+  return (
+    <div className="flex items-center gap-1">
+      <span className={`h-2 w-2 rounded-full ${dotClass} animate-bounce`} />
+      <span className={`h-2 w-2 rounded-full ${dotClass} animate-bounce`} style={{ animationDelay: "0.12s" }} />
+      <span className={`h-2 w-2 rounded-full ${dotClass} animate-bounce`} style={{ animationDelay: "0.24s" }} />
+    </div>
+  );
+}
+
 export function CoachPage() {
   const [messages, setMessages] = useState([starterMessage]);
   const [input, setInput] = useState("");
   const [sessionId, setSessionId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [streamingId, setStreamingId] = useState(null);
   const [riskLevel, setRiskLevel] = useState("neutral");
   const [suggestedActions, setSuggestedActions] = useState([]);
   const [resources, setResources] = useState([]);
   const [error, setError] = useState("");
+  const streamTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (streamTimeoutRef.current) {
+        window.clearTimeout(streamTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const historyPayload = useMemo(
     () =>
@@ -46,7 +68,7 @@ export function CoachPage() {
 
   const handleSend = async (text) => {
     const trimmed = text.trim();
-    if (!trimmed || loading) {
+    if (!trimmed || loading || streamingId) {
       return;
     }
 
@@ -63,6 +85,40 @@ export function CoachPage() {
     setMessages((current) => [...current, userMessage]);
     setInput("");
 
+    const streamAssistantReply = (messageId, replyText, tags = []) => {
+      const fullText = replyText || "";
+      let index = 0;
+      const stepSize = Math.max(1, Math.ceil(fullText.length / 80));
+
+      setStreamingId(messageId);
+
+      const step = () => {
+        index = Math.min(fullText.length, index + stepSize);
+        setMessages((current) =>
+          current.map((message) =>
+            message.id === messageId
+              ? { ...message, content: fullText.slice(0, index) }
+              : message,
+          ),
+        );
+
+        if (index < fullText.length) {
+          streamTimeoutRef.current = window.setTimeout(step, 18);
+        } else {
+          setMessages((current) =>
+            current.map((message) =>
+              message.id === messageId
+                ? { ...message, isStreaming: false, tags }
+                : message,
+            ),
+          );
+          setStreamingId(null);
+        }
+      };
+
+      step();
+    };
+
     try {
       const response = await sendCoachMessage({
         message: trimmed,
@@ -74,21 +130,27 @@ export function CoachPage() {
       setSuggestedActions(response.suggestedActions || []);
       setResources(response.resources || []);
 
+      const assistantId = createId();
       const assistantMessage = {
-        id: createId(),
+        id: assistantId,
         role: "assistant",
-        content: response.reply,
-        tags: response.tags || [],
+        content: "",
+        tags: [],
+        isStreaming: true,
         createdAt: new Date().toISOString(),
       };
 
       setMessages((current) => [...current, assistantMessage]);
+      streamAssistantReply(assistantId, response.reply, response.tags || []);
     } catch (sendError) {
       setError(sendError.message || "Unable to reach the wellness coach.");
     } finally {
       setLoading(false);
     }
   };
+
+  const showTyping = loading && !streamingId;
+  const isBusy = loading || Boolean(streamingId);
 
   return (
     <section className="space-y-6">
@@ -136,6 +198,7 @@ export function CoachPage() {
                 key={message.id}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
@@ -145,7 +208,14 @@ export function CoachPage() {
                       : "bg-white text-ink border border-ink/10"
                   }`}
                 >
-                  <p>{message.content}</p>
+                  <p>
+                    {message.content}
+                    {message.isStreaming ? (
+                      <span className="inline-flex items-center pl-2 align-middle">
+                        <TypingDots />
+                      </span>
+                    ) : null}
+                  </p>
                   {message.tags?.length ? (
                     <div className="mt-2 flex flex-wrap gap-2">
                       {message.tags.map((tag) => (
@@ -161,6 +231,18 @@ export function CoachPage() {
                 </div>
               </motion.div>
             ))}
+            {showTyping ? (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="flex justify-start"
+              >
+                <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 shadow-md">
+                  <TypingDots />
+                </div>
+              </motion.div>
+            ) : null}
           </div>
 
           {error ? <p className="mt-4 text-sm text-coral">{error}</p> : null}
@@ -181,9 +263,9 @@ export function CoachPage() {
             <button
               type="submit"
               className="rounded-full bg-reef px-6 py-3 text-sm font-semibold text-ink transition hover:brightness-105"
-              disabled={loading}
+              disabled={isBusy}
             >
-              {loading ? "Thinking..." : "Send"}
+              {loading ? "Thinking..." : streamingId ? "Streaming..." : "Send"}
             </button>
           </form>
         </div>
@@ -198,6 +280,7 @@ export function CoachPage() {
                   key={action.label}
                   type="button"
                   onClick={() => handleSend(action.message)}
+                  disabled={isBusy}
                   className="rounded-2xl border border-ink/10 bg-foam px-4 py-3 text-left text-sm font-semibold text-ink/80 transition hover:border-reef/60"
                 >
                   {action.label}

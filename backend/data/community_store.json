@@ -1,0 +1,19 @@
+{
+  "posts": [
+    {
+      "id": "6893a7c368da461e8aed2429b60a70b0",
+      "content": "i got stress from exam",
+      "topic": "Exams",
+      "mood": "neutral",
+      "createdAt": "2026-05-28T11:24:56.016909+00:00",
+      "reactions": {
+        "heart": 1,
+        "hug": 1,
+        "strength": 1
+      },
+      "flagged": false,
+      "visibility": "public",
+      "anonName": "Student 407"
+    }
+  ]
+}

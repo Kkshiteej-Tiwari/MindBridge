@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import random
+import re
 from datetime import datetime, timezone
 
 from openai import OpenAI
@@ -25,6 +26,42 @@ FALLBACK_RESPONSES = [
     "That makes sense. You are not alone in this. "
     "What would feel like a gentle next step for you right now?",
 ]
+
+AFFIRMATIVE_PHRASES = {
+    "yes",
+    "yeah",
+    "yep",
+    "sure",
+    "okay",
+    "ok",
+    "please",
+    "alright",
+    "go ahead",
+}
+
+NEGATIVE_PHRASES = {
+    "no",
+    "nope",
+    "nah",
+    "not really",
+    "dont",
+    "do not",
+}
+
+BREATHING_TEXT = (
+    "Let us do a short box breathing reset: inhale 4, hold 4, exhale 4, hold 4. "
+    "Repeat four rounds and tell me how it feels."
+)
+
+FOCUS_TEXT = (
+    "Let us make this lighter. Pick one small task and do a 25 minute focus block. "
+    "What is the first tiny step you can start with?"
+)
+
+LONELY_TEXT = (
+    "Feeling alone can be really hard. If there is no one nearby, we can still reach out online "
+    "or to a helpline. Would you like a few options?"
+)
 
 SUGGESTED_ACTIONS = {
     "crisis": [
@@ -90,15 +127,81 @@ def _build_history(history: list[dict[str, object]]) -> list[dict[str, str]]:
     return messages
 
 
-def _fallback_reply(message: str, risk_level: str) -> str:
+def _normalize_text(text: str) -> str:
+    return re.sub(r"\s+", " ", text.lower()).strip()
+
+
+def _matches_any(text: str, phrases: set[str]) -> bool:
+    for phrase in phrases:
+        if re.search(rf"(?<!\w){re.escape(phrase)}(?!\w)", text):
+            return True
+    return False
+
+
+def _last_assistant_message(history: list[dict[str, object]]) -> str:
+    for item in reversed(history):
+        if str(item.get("role")) == "assistant":
+            return str(item.get("content", ""))
+    return ""
+
+
+def _choose_response(candidates: list[str], last_assistant: str) -> str:
+    if not candidates:
+        return ""
+    trimmed = [item for item in candidates if item.strip()]
+    if not trimmed:
+        return ""
+    last_assistant = last_assistant.strip()
+    if last_assistant:
+        filtered = [item for item in trimmed if item.strip() != last_assistant]
+        if filtered:
+            return random.choice(filtered)
+    return random.choice(trimmed)
+
+
+def _fallback_reply(message: str, risk_level: str, history: list[dict[str, object]]) -> str:
     if risk_level == "crisis":
         return (
             "I am really sorry you are feeling this way. You deserve support. "
             "If you are in immediate danger or thinking about self harm, "
             "please contact local emergency services or a trusted person now."
         )
-    response = random.choice(FALLBACK_RESPONSES)
-    return response
+
+    normalized = _normalize_text(message)
+    last_assistant = _last_assistant_message(history)
+
+    if _matches_any(normalized, AFFIRMATIVE_PHRASES):
+        if "breathing" in last_assistant or "reset" in last_assistant:
+            return BREATHING_TEXT
+        if "small part" in last_assistant or "next step" in last_assistant:
+            return "Great. What is one small part you can handle today?"
+        return "Got it. What would feel like a gentle next step right now?"
+
+    if _matches_any(normalized, NEGATIVE_PHRASES):
+        return "Thanks for letting me know. Would you like a grounding exercise or a planning step?"
+
+    if "breath" in normalized or "breathing" in normalized:
+        return BREATHING_TEXT
+
+    if "focus" in normalized or "study" in normalized or "exam" in normalized:
+        return FOCUS_TEXT
+
+    if "lonely" in normalized or "alone" in normalized or "no one" in normalized or "nobody" in normalized:
+        return LONELY_TEXT
+
+    if "stress" in normalized or "overwhelm" in normalized or "anx" in normalized:
+        return "That sounds heavy. Would it help to pick the most urgent task and break it into a 10 minute step?"
+
+    if "sleep" in normalized or "tired" in normalized:
+        return "Sleep can make everything feel bigger. Would a short wind down routine help tonight?"
+
+    if "thanks" in normalized or "thank" in normalized:
+        return "You are welcome. I am here with you. What else would help right now?"
+
+    if "hi" == normalized or normalized.startswith("hello"):
+        return "Hi. I am here with you. What is on your mind today?"
+
+    return _choose_response(FALLBACK_RESPONSES, last_assistant)
 
 
 def generate_reply(message: str, session_id: str | None = None, history: list[object] | None = None) -> dict[str, object]:
@@ -109,17 +212,18 @@ def generate_reply(message: str, session_id: str | None = None, history: list[ob
     tags = _infer_tags(message)
     resources = get_crisis_resources("India") if risk_level == "crisis" else []
 
+    if history is not None:
+        base_history = [
+            item.model_dump(by_alias=True) if hasattr(item, "model_dump") else item
+            for item in history
+        ]
+    else:
+        base_history = get_session_messages(session_id)
+
     client = _openai_client()
     reply_text = ""
     if client and risk_level != "crisis":
         model_name = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-        if history is not None:
-            base_history = [
-                item.model_dump(by_alias=True) if hasattr(item, "model_dump") else item
-                for item in history
-            ]
-        else:
-            base_history = get_session_messages(session_id)
         prompt_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
         prompt_messages.extend(_build_history(base_history))
         prompt_messages.append({"role": "user", "content": message})
@@ -131,9 +235,9 @@ def generate_reply(message: str, session_id: str | None = None, history: list[ob
             )
             reply_text = response.choices[0].message.content or ""
         except Exception:
-            reply_text = _fallback_reply(message, risk_level)
+            reply_text = _fallback_reply(message, risk_level, base_history)
     else:
-        reply_text = _fallback_reply(message, risk_level)
+        reply_text = _fallback_reply(message, risk_level, base_history)
 
     suggested_actions = SUGGESTED_ACTIONS.get(risk_level, [])
     append_message(session_id, "user", message)

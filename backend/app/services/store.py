@@ -65,7 +65,7 @@ def get_entry(entry_id: str) -> dict[str, object] | None:
     return None
 
 
-def create_entry(content: str = "Write about your day!") -> dict[str, object]:
+def create_entry(content: str = "") -> dict[str, object]:
     with STORE_LOCK:
         state = _read_state()
         now = _now()

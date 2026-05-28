@@ -32,11 +32,11 @@ class JournalEntry(BaseModel):
 
 
 class JournalCreateRequest(BaseModel):
-    content: str = Field(default="Write about your day!", min_length=1)
+    content: str = Field(default="", min_length=0)
 
 
 class JournalUpdateRequest(BaseModel):
-    content: str = Field(min_length=1)
+    content: str = Field(min_length=0)
 
 
 class JournalListResponse(BaseModel):
