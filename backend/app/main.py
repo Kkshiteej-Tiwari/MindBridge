@@ -3,6 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .routes.health import router as health_router
 from .routes.journal import router as journal_router
+from .routes.chat import router as chat_router
+from .routes.community import router as community_router
+from .routes.challenges import router as challenges_router
+from .routes.resources import router as resources_router
+from .routes.stress import router as stress_router
 
 app = FastAPI(title="MindBridge Backend", version="0.1.0")
 
@@ -16,3 +21,8 @@ app.add_middleware(
 
 app.include_router(health_router)
 app.include_router(journal_router)
+app.include_router(chat_router)
+app.include_router(community_router)
+app.include_router(challenges_router)
+app.include_router(resources_router)
+app.include_router(stress_router)

@@ -150,3 +150,18 @@ def analyze_content(content: str) -> AnalysisResult:
         sentiment_score=sentiment_score,
         negative=negative,
     )
+
+
+def classify_risk(content: str) -> str:
+    lower = content.lower()
+    if _count_matches(lower, CRISIS_WORDS):
+        return "crisis"
+    if _count_matches(lower, NEGATIVE_WORDS):
+        return "distressed"
+    if _count_matches(lower, POSITIVE_WORDS):
+        return "positive"
+    return "neutral"
+
+
+def detect_crisis(content: str) -> bool:
+    return classify_risk(content) == "crisis"
