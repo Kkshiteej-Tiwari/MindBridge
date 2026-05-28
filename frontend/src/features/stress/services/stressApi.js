@@ -7,3 +7,12 @@ export async function forecastStress(payload) {
   });
   return response;
 }
+
+export async function importCalendarFeed(calendarUrl) {
+  const response = await request("/stress/import-calendar", {
+    method: "POST",
+    body: JSON.stringify({ calendar_url: calendarUrl }),
+  });
+
+  return response;
+}

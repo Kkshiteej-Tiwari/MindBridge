@@ -1,0 +1,64 @@
+{
+  "posts": [
+    {
+      "id": "9fe4271f45df4734892950a3f45c5139",
+      "content": "Hello eveeryone",
+      "topic": "General",
+      "mood": "stressed",
+      "createdAt": "2026-05-28T17:23:42.558356+00:00",
+      "reactions": {
+        "heart": 2,
+        "hug": 6,
+        "strength": 20
+      },
+      "flagged": false,
+      "visibility": "public",
+      "anonName": "Student 857"
+    },
+    {
+      "id": "8ebe3d7b26e44bacb83481b9e41b2436",
+      "content": "Hello eveeryone",
+      "topic": "General",
+      "mood": "stressed",
+      "createdAt": "2026-05-28T17:23:42.583948+00:00",
+      "reactions": {
+        "heart": 2,
+        "hug": 0,
+        "strength": 0
+      },
+      "flagged": false,
+      "visibility": "public",
+      "anonName": "Student 172"
+    },
+    {
+      "id": "95d2f2a6032b44e1844f0ed034b53173",
+      "content": "Feeling anxious but trying to keep going.",
+      "topic": "General",
+      "mood": "stressed",
+      "createdAt": "2026-05-28T17:28:49.673359+00:00",
+      "reactions": {
+        "heart": 1,
+        "hug": 0,
+        "strength": 0
+      },
+      "flagged": false,
+      "visibility": "public",
+      "anonName": "Student 358"
+    },
+    {
+      "id": "2346164184ae40468a512c285e5af02d",
+      "content": "Feeling anxious but trying to keep going.",
+      "topic": "General",
+      "mood": "stressed",
+      "createdAt": "2026-05-28T17:30:10.907460+00:00",
+      "reactions": {
+        "heart": 0,
+        "hug": 0,
+        "strength": 0
+      },
+      "flagged": false,
+      "visibility": "public",
+      "anonName": "Student 887"
+    }
+  ]
+}

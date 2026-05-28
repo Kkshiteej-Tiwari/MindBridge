@@ -58,6 +58,16 @@ RESOURCE_ITEMS: list[dict[str, str | None]] = [
 
 CRISIS_RESOURCES: list[dict[str, str | None]] = [
     {
+        "id": "global-emergency",
+        "title": "Local emergency services",
+        "description": "If you are in immediate danger, contact local emergency services now.",
+        "url": None,
+        "phone": "112 / 911",
+        "topic": "crisis",
+        "urgency": "urgent",
+        "location": "Global",
+    },
+    {
         "id": "india-icall",
         "title": "iCall Helpline",
         "description": "Confidential counseling support by trained professionals.",
@@ -87,6 +97,26 @@ CRISIS_RESOURCES: list[dict[str, str | None]] = [
         "urgency": "urgent",
         "location": "India",
     },
+    {
+        "id": "us-988",
+        "title": "988 Suicide & Crisis Lifeline",
+        "description": "Free, confidential support in the United States and territories.",
+        "url": "https://988lifeline.org",
+        "phone": "988",
+        "topic": "crisis",
+        "urgency": "urgent",
+        "location": "US",
+    },
+    {
+        "id": "uk-samaritans",
+        "title": "Samaritans",
+        "description": "24/7 emotional support in the United Kingdom and Ireland.",
+        "url": "https://www.samaritans.org",
+        "phone": "116 123",
+        "topic": "crisis",
+        "urgency": "urgent",
+        "location": "UK",
+    },
 ]
 
 
@@ -100,7 +130,8 @@ def get_resources(topic: str | None = None) -> list[dict[str, str | None]]:
 def get_crisis_resources(country: str | None = None) -> list[dict[str, str | None]]:
     if not country:
         return list(CRISIS_RESOURCES)
-    return [item for item in CRISIS_RESOURCES if (item.get("location") or "").lower() == country.lower()]
+    filtered = [item for item in CRISIS_RESOURCES if (item.get("location") or "").lower() == country.lower()]
+    return filtered or [item for item in CRISIS_RESOURCES if (item.get("location") or "").lower() == "global"]
 
 
 def merge_resources(*resource_sets: Iterable[dict[str, str | None]]) -> list[dict[str, str | None]]:

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { createCommunityPost, fetchCommunityFeed, reactToPost } from "./services/communityApi";
+import { useCommunitySocket } from "./hooks/useCommunitySocket";
 
 const topics = ["All", "Exams", "Relationships", "Loneliness", "Career", "Family", "General"];
 const moods = ["calm", "neutral", "stressed", "hopeful"];
@@ -31,6 +32,13 @@ export function CommunityPage() {
     loadFeed(topic);
   }, [topic]);
 
+  // socket: append newly posted items
+  const { post: socketPost, react: socketReact } = useCommunitySocket({
+    room: "global",
+    onPosted: (p) => setPosts((cur) => [p, ...cur]),
+    onUpdated: (p) => setPosts((cur) => cur.map((item) => (item.id === p.id ? p : item))),
+  });
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const trimmed = content.trim();
@@ -43,14 +51,24 @@ export function CommunityPage() {
 
     try {
       const postTopic = topic === "All" ? "General" : topic;
-      const post = await createCommunityPost({ content: trimmed, topic: postTopic, mood });
-      if (post.flagged) {
-        setNotice("Thanks for sharing. Your post is being reviewed for safety.");
+      // try socket post first for realtime
+      const result = await socketPost({ content: trimmed, topic: postTopic, mood });
+      if (result?.ok && result.post) {
+        const post = result.post;
+        if (post.flagged) {
+          setNotice("Thanks for sharing. Your post is being reviewed for safety.");
+        } else {
+          setNotice("Your post is live and ready for support.");
+        }
+        setContent("");
       } else {
-        setNotice("Your post is live and ready for support.");
+        // fallback to REST
+        const post = await createCommunityPost({ content: trimmed, topic: postTopic, mood });
+        if (post.flagged) setNotice("Thanks for sharing. Your post is being reviewed for safety.");
+        else setNotice("Your post is live and ready for support.");
+        setContent("");
+        loadFeed(topic);
       }
-      setContent("");
-      loadFeed(topic);
     } catch (postError) {
       setError(postError.message || "Unable to share your post.");
     }
@@ -59,8 +77,15 @@ export function CommunityPage() {
   const handleReaction = async (postId, reaction) => {
     setError("");
     try {
-      const updated = await reactToPost(postId, reaction);
-      setPosts((current) => current.map((post) => (post.id === updated.id ? updated : post)));
+      // attempt socket react
+      const resp = await socketReact({ postId, reaction });
+      if (resp?.ok && resp.post) {
+        const updated = resp.post;
+        setPosts((current) => current.map((post) => (post.id === updated.id ? updated : post)));
+      } else {
+        const updated = await reactToPost(postId, reaction);
+        setPosts((current) => current.map((post) => (post.id === updated.id ? updated : post)));
+      }
     } catch (reactionError) {
       setError(reactionError.message || "Unable to send support.");
     }

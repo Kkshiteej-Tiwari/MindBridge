@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { sendCoachMessage } from "./services/coachApi";
+import { sendCoachMessage, sendCoachMessageStream } from "./services/coachApi";
 
 const starterMessage = {
   id: "welcome",
@@ -33,6 +33,7 @@ export function CoachPage() {
   const [suggestedActions, setSuggestedActions] = useState([]);
   const [resources, setResources] = useState([]);
   const [error, setError] = useState("");
+  const [streamingMessageId, setStreamingMessageId] = useState(null);
 
   const historyPayload = useMemo(
     () =>
@@ -63,37 +64,80 @@ export function CoachPage() {
     setMessages((current) => [...current, userMessage]);
     setInput("");
 
+    const assistantId = createId();
+    setStreamingMessageId(assistantId);
+    setMessages((current) => [
+      ...current,
+      {
+        id: assistantId,
+        role: "assistant",
+        content: "",
+        tags: [],
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+
     try {
-      const response = await sendCoachMessage({
+      const response = await sendCoachMessageStream({
         message: trimmed,
         sessionId,
         history: historyPayload,
+        onDelta: (chunk) => {
+          setMessages((current) =>
+            current.map((message) =>
+              message.id === assistantId ? { ...message, content: `${message.content}${chunk}` } : message,
+            ),
+          );
+        },
       });
       setSessionId(response.sessionId);
       setRiskLevel(response.riskLevel);
       setSuggestedActions(response.suggestedActions || []);
       setResources(response.resources || []);
-
-      const assistantMessage = {
-        id: createId(),
-        role: "assistant",
-        content: response.reply,
-        tags: response.tags || [],
-        createdAt: new Date().toISOString(),
-      };
-
-      setMessages((current) => [...current, assistantMessage]);
+      setMessages((current) =>
+        current.map((message) =>
+          message.id === assistantId
+            ? { ...message, content: response.reply, tags: response.tags || [] }
+            : message,
+        ),
+      );
     } catch (sendError) {
-      setError(sendError.message || "Unable to reach the wellness coach.");
+      try {
+        const response = await sendCoachMessage({
+          message: trimmed,
+          sessionId,
+          history: historyPayload,
+        });
+
+        setSessionId(response.sessionId);
+        setRiskLevel(response.riskLevel);
+        setSuggestedActions(response.suggestedActions || []);
+        setResources(response.resources || []);
+        setMessages((current) =>
+          current.map((message) =>
+            message.id === assistantId
+              ? {
+                  ...message,
+                  content: response.reply,
+                  tags: response.tags || [],
+                }
+              : message,
+          ),
+        );
+      } catch (fallbackError) {
+        setMessages((current) => current.filter((message) => message.id !== assistantId));
+        setError(fallbackError.message || sendError.message || "Unable to reach the wellness coach.");
+      }
     } finally {
       setLoading(false);
+      setStreamingMessageId(null);
     }
   };
 
   return (
     <section className="space-y-6">
       <header className="rounded-3xl border border-ink/10 bg-white/70 p-6 shadow-xl shadow-ink/10 backdrop-blur-md">
-        <p className="text-xs uppercase tracking-[0.3em] text-ink/50">AI Wellness Coach</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-ink/50">Wellness Coach</p>
         <h2 className="mt-2 font-display text-3xl font-semibold text-ink">Talk it out, one step at a time</h2>
         <p className="mt-3 max-w-3xl text-sm text-ink/70 md:text-base">
           Share what is going on. MindBridge responds with grounded, student friendly support and practical next steps.
@@ -145,7 +189,7 @@ export function CoachPage() {
                       : "bg-white text-ink border border-ink/10"
                   }`}
                 >
-                  <p>{message.content}</p>
+                  <p>{message.content || (message.id === streamingMessageId ? "Thinking..." : "")}</p>
                   {message.tags?.length ? (
                     <div className="mt-2 flex flex-wrap gap-2">
                       {message.tags.map((tag) => (

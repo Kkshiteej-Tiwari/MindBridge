@@ -22,7 +22,7 @@ export function JournalAnalysisCard({ analysis }) {
     <aside className="rounded-3xl border border-ink/10 bg-white/70 p-5 shadow-xl shadow-ink/10 backdrop-blur-md md:p-6">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-ink/50">AI Analysis</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-ink/50">Mood reflection</p>
           <h3 className="mt-2 font-display text-2xl font-semibold text-ink">Detected mood</h3>
         </div>
         <div

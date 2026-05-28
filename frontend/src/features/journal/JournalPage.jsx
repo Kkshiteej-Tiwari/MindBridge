@@ -1,12 +1,21 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import WellnessOrb from "../dashboard/WellnessOrb";
 import { useJournalFeature } from "./hooks/useJournalFeature";
 import { JournalEditor } from "./components/JournalEditor";
 import { JournalAnalysisCard } from "./components/JournalAnalysisCard";
 import { HistoryChart } from "./components/HistoryChart";
 
-export function JournalPage() {
+export function JournalPage({ voiceMode = false }) {
   const { activeEntry, activeId, createDraft, error, history, loading, saveEntry, saving, selectEntry, entries } =
     useJournalFeature();
+  const editorAnchorRef = useRef(null);
+
+  useEffect(() => {
+    if (voiceMode && editorAnchorRef.current) {
+      editorAnchorRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [voiceMode]);
 
   return (
     <section className="space-y-6">
@@ -16,27 +25,27 @@ export function JournalPage() {
         className="rounded-3xl border border-ink/10 bg-white/70 p-5 shadow-xl shadow-ink/10 backdrop-blur-md md:p-6"
       >
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-ink/50">MindBridge AI</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-5xl">AI Mood Journal</h2>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-ink/70 md:text-base">
-              Write daily reflections, let the AI analyze your mood in real time, and track your emotional trend over time.
-            </p>
+          <div className="md:flex md:items-center md:gap-6">
+            <div className="hidden md:block">
+              <WellnessOrb />
+            </div>
+
+            <div>
+              <p className="text-xs uppercase tracking-[0.35em] text-ink/50">MindBridge</p>
+              <h2 className="mt-2 font-display text-3xl font-semibold text-ink md:text-5xl">Your Mood Journal</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-ink/70 md:text-base">
+                Write daily reflections, let the journal reflect on your mood in real time, and track emotional trends over time.
+              </p>
+            </div>
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={createDraft}
-              className="rounded-full bg-reef px-5 py-3 text-sm font-semibold text-ink transition hover:brightness-105"
-            >
-              New entry
-            </button>
             <div className="rounded-full border border-ink/10 bg-white/80 px-5 py-3 text-sm text-ink/70">
               {entries.length} journal entry{entries.length === 1 ? "" : "s"}
             </div>
           </div>
         </div>
+
         {error ? <p className="mt-4 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">{error}</p> : null}
       </motion.header>
 
@@ -47,7 +56,9 @@ export function JournalPage() {
         </div>
       ) : (
         <div className="grid gap-6 lg:grid-cols-[1.5fr_0.9fr]">
-          <JournalEditor entry={activeEntry} onSave={saveEntry} saving={saving} />
+          <div ref={editorAnchorRef}>
+            <JournalEditor entry={activeEntry} onSave={saveEntry} saving={saving} onRegisterEntry={createDraft} />
+          </div>
           <JournalAnalysisCard analysis={activeEntry?.analysis} />
         </div>
       )}

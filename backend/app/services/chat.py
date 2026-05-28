@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import json
 import os
 import random
 from datetime import datetime, timezone
+from typing import Iterator
 
 from openai import OpenAI
 
@@ -11,9 +13,10 @@ from .chat_store import append_message, create_session, get_session_messages
 from .resources import get_crisis_resources
 
 SYSTEM_PROMPT = (
-    "You are MindBridge, an empathetic student wellness coach. "
-    "Use supportive, non-judgmental language. "
-    "Offer one small next step and ask a gentle follow up question. "
+    "You are MindBridge, a warm self-well-being conversation partner. "
+    "Sound calm, caring, and non-judgmental, like a supportive peer. "
+    "Keep every reply to 4-5 short lines max. "
+    "Focus on one comforting reflection, one small next step, and one gentle question. "
     "If there are signs of crisis, encourage reaching out to a trusted person or helpline."
 )
 
@@ -73,10 +76,15 @@ def _infer_tags(text: str) -> list[str]:
 
 
 def _openai_client() -> OpenAI | None:
+    groq_api_key = os.getenv("GROQ_API_KEY")
+    if groq_api_key:
+        return OpenAI(api_key=groq_api_key, base_url="https://api.groq.com/openai/v1")
+
     api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        return None
-    return OpenAI(api_key=api_key)
+    if api_key:
+        return OpenAI(api_key=api_key)
+
+    return None
 
 
 def _build_history(history: list[dict[str, object]]) -> list[dict[str, str]]:
@@ -101,7 +109,7 @@ def _fallback_reply(message: str, risk_level: str) -> str:
     return response
 
 
-def generate_reply(message: str, session_id: str | None = None, history: list[object] | None = None) -> dict[str, object]:
+def _build_reply_payload(message: str, session_id: str | None = None, history: list[object] | None = None) -> dict[str, object]:
     if not session_id:
         session_id = create_session()["id"]
 
@@ -112,7 +120,7 @@ def generate_reply(message: str, session_id: str | None = None, history: list[ob
     client = _openai_client()
     reply_text = ""
     if client and risk_level != "crisis":
-        model_name = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        model_name = os.getenv("GROQ_MODEL") or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         if history is not None:
             base_history = [
                 item.model_dump(by_alias=True) if hasattr(item, "model_dump") else item
@@ -136,9 +144,6 @@ def generate_reply(message: str, session_id: str | None = None, history: list[ob
         reply_text = _fallback_reply(message, risk_level)
 
     suggested_actions = SUGGESTED_ACTIONS.get(risk_level, [])
-    append_message(session_id, "user", message)
-    append_message(session_id, "assistant", reply_text, tags=tags)
-
     return {
         "sessionId": session_id,
         "reply": reply_text,
@@ -148,3 +153,31 @@ def generate_reply(message: str, session_id: str | None = None, history: list[ob
         "resources": resources,
         "updatedAt": datetime.now(timezone.utc).isoformat(),
     }
+
+
+def _persist_chat_turn(session_id: str, message: str, reply_text: str, tags: list[str]) -> None:
+    append_message(session_id, "user", message)
+    append_message(session_id, "assistant", reply_text, tags=tags)
+
+
+def generate_reply(message: str, session_id: str | None = None, history: list[object] | None = None) -> dict[str, object]:
+    payload = _build_reply_payload(message, session_id, history)
+    _persist_chat_turn(str(payload["sessionId"]), message, str(payload["reply"]), list(payload.get("tags", [])))
+    return payload
+
+
+def stream_reply_chunks(message: str, session_id: str | None = None, history: list[object] | None = None) -> Iterator[dict[str, object]]:
+    payload = _build_reply_payload(message, session_id, history)
+    reply_text = str(payload["reply"])
+
+    # Stream in short word groups to keep UI responsive.
+    words = reply_text.split()
+    buffered = []
+    for index, word in enumerate(words, start=1):
+        buffered.append(word)
+        if index % 3 == 0 or index == len(words):
+            yield {"type": "delta", "text": " ".join(buffered) + (" " if index < len(words) else "")}
+            buffered = []
+
+    _persist_chat_turn(str(payload["sessionId"]), message, reply_text, list(payload.get("tags", [])))
+    yield {"type": "done", "data": payload}

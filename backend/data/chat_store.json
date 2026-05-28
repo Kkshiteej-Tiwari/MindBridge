@@ -1,0 +1,249 @@
+{
+  "sessions": [
+    {
+      "id": "640dc80c079b443a90c522a038fe35b4",
+      "createdAt": "2026-05-28T11:39:05.812470+00:00",
+      "messages": []
+    },
+    {
+      "id": "3351e93138f64c238ea386ed79659831",
+      "createdAt": "2026-05-28T11:43:45.226811+00:00",
+      "messages": []
+    },
+    {
+      "id": "5e1e42cce7a24c5b8b8bea71c5db93eb",
+      "createdAt": "2026-05-28T11:43:48.643347+00:00",
+      "messages": []
+    },
+    {
+      "id": "330ceab2d38f458a808adb8353511ab7",
+      "createdAt": "2026-05-28T11:45:40.228335+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I feel overwhelmed and need a calm response.",
+          "tags": [],
+          "createdAt": "2026-05-28T11:45:40.986225+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "It's okay to feel overwhelmed. Take a deep breath in, and let it out slowly. You're safe, and you're strong. \n\nNext step: Take a 5-minute break to sit quietly, and focus on your breath. \n\nHow can you prioritize self-care today?",
+          "tags": [],
+          "createdAt": "2026-05-28T11:45:41.002336+00:00"
+        }
+      ]
+    },
+    {
+      "id": "7fdda47dcbec4e0881cbd7136c7c345b",
+      "createdAt": "2026-05-28T11:57:10.587735+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I need to breathe and reset.",
+          "tags": [],
+          "createdAt": "2026-05-28T11:57:11.315817+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Take a deep breath in, hold it for a moment, and exhale slowly. Notice the sensation of air moving in and out. What small step can you take to create some calm space for yourself?",
+          "tags": [
+            "Breathing"
+          ],
+          "createdAt": "2026-05-28T11:57:11.330817+00:00"
+        },
+        {
+          "role": "user",
+          "content": "I am struggling to focus on my tasks.",
+          "tags": [],
+          "createdAt": "2026-05-28T11:57:15.539037+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "It's normal for focus to waver. Try breaking down a single task into smaller, manageable chunks. What's one task you can commit to tackling for just 10 minutes?",
+          "tags": [
+            "Focus"
+          ],
+          "createdAt": "2026-05-28T11:57:15.554042+00:00"
+        }
+      ]
+    },
+    {
+      "id": "d80849d590df4366a2b309c2e643baeb",
+      "createdAt": "2026-05-28T12:05:03.238608+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I am struggling to focus on my tasks.",
+          "tags": [],
+          "createdAt": "2026-05-28T12:05:03.931490+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "It can be overwhelming when tasks pile up. \nLet's take a small step: break down one big task into a manageable chunk. \nWhat's the one task that feels most daunting to you?",
+          "tags": [
+            "Focus"
+          ],
+          "createdAt": "2026-05-28T12:05:03.946552+00:00"
+        },
+        {
+          "role": "user",
+          "content": "I feel lonely and disconnected.",
+          "tags": [],
+          "createdAt": "2026-05-28T12:05:09.486629+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Feeling lonely can be really tough. \nLet's take a small step: reach out to a friend or family member you haven't talked to in a while. \nWhat's one person you'd like to reconnect with?",
+          "tags": [
+            "Connection"
+          ],
+          "createdAt": "2026-05-28T12:05:09.498637+00:00"
+        },
+        {
+          "role": "user",
+          "content": "Ii am haing panic attacks help me",
+          "tags": [],
+          "createdAt": "2026-05-28T12:05:30.742577+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Panic attacks can be incredibly scary. \nLet's take a small step: breathe deeply with me for a few seconds - inhale, hold, exhale. \nWhat is one thing that usually helps you feel calmer when you're feeling anxious?",
+          "tags": [
+            "Grounding"
+          ],
+          "createdAt": "2026-05-28T12:05:30.755561+00:00"
+        }
+      ]
+    },
+    {
+      "id": "5a523cba7d9745528bea11efa4fa36fa",
+      "createdAt": "2026-05-28T12:42:14.643368+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I feel overwhelmed but want to keep going.",
+          "tags": [],
+          "createdAt": "2026-05-28T12:42:15.100721+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you for sharing that. It sounds like this has been heavy. Would it help to name one small part you can handle today?",
+          "tags": [],
+          "createdAt": "2026-05-28T12:42:15.109066+00:00"
+        }
+      ]
+    },
+    {
+      "id": "7a32f37b3d714881bf51059e843838e6",
+      "createdAt": "2026-05-28T12:43:04.590119+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I need to breathe and reset.",
+          "tags": [],
+          "createdAt": "2026-05-28T12:43:04.939057+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [
+            "Breathing"
+          ],
+          "createdAt": "2026-05-28T12:43:04.947572+00:00"
+        },
+        {
+          "role": "user",
+          "content": "I feel lonely and disconnected.",
+          "tags": [],
+          "createdAt": "2026-05-28T12:43:07.229823+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [
+            "Connection"
+          ],
+          "createdAt": "2026-05-28T12:43:07.236339+00:00"
+        }
+      ]
+    },
+    {
+      "id": "11813e652c4b4f1d9fb6f79eb41d596c",
+      "createdAt": "2026-05-28T17:27:07.249480+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I need to breathe and reset.",
+          "tags": [],
+          "createdAt": "2026-05-28T17:27:07.844210+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [
+            "Breathing"
+          ],
+          "createdAt": "2026-05-28T17:27:07.852207+00:00"
+        }
+      ]
+    },
+    {
+      "id": "fe27ea2bd3e44daa918b5b098d60acbf",
+      "createdAt": "2026-05-28T17:28:49.360083+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I feel overwhelmed with exams.",
+          "tags": [],
+          "createdAt": "2026-05-28T17:28:49.660746+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [
+            "Study"
+          ],
+          "createdAt": "2026-05-28T17:28:49.668256+00:00"
+        }
+      ]
+    },
+    {
+      "id": "a36cc67de6314241b569359bd02b88ef",
+      "createdAt": "2026-05-28T17:30:10.476656+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I feel overwhelmed with exams.",
+          "tags": [],
+          "createdAt": "2026-05-28T17:30:10.888068+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "That makes sense. You are not alone in this. What would feel like a gentle next step for you right now?",
+          "tags": [
+            "Study"
+          ],
+          "createdAt": "2026-05-28T17:30:10.897979+00:00"
+        }
+      ]
+    },
+    {
+      "id": "8a029a0e882542948ea4b8e532f4feff",
+      "createdAt": "2026-05-28T17:40:06.624756+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I feel overwhelmed and stuck.",
+          "tags": [],
+          "createdAt": "2026-05-28T17:40:06.981691+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [],
+          "createdAt": "2026-05-28T17:40:06.991714+00:00"
+        }
+      ]
+    }
+  ]
+}
