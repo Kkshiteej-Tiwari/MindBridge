@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .routes.health import router as health_router
+from .routes.journal import router as journal_router
+
 app = FastAPI(title="MindBridge Backend", version="0.1.0")
 
 app.add_middleware(
@@ -11,7 +14,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.get("/health")
-async def health_check() -> dict[str, str]:
-    return {"status": "ok"}
+app.include_router(health_router)
+app.include_router(journal_router)

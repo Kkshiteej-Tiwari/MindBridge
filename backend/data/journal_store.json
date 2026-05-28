@@ -1,0 +1,144 @@
+{
+  "entries": [
+    {
+      "id": "31870e79a03247f68e60ca4760ad1daa",
+      "content": "Write about your day!",
+      "createdAt": "2026-05-28T09:05:48.976746+00:00",
+      "updatedAt": "2026-05-28T09:05:48.976746+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Your day!",
+        "summary": "Write about your day!",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "7afff7be2d6b49c9a65f06bfaf0f2ca5",
+      "content": "Write about your day!",
+      "createdAt": "2026-05-28T09:05:49.728436+00:00",
+      "updatedAt": "2026-05-28T09:05:49.728436+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Your day!",
+        "summary": "Write about your day!",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "e2f7900f8a914df8b51bc74f55137ebe",
+      "content": "Write about your day!",
+      "createdAt": "2026-05-28T09:05:49.969698+00:00",
+      "updatedAt": "2026-05-28T09:05:49.969698+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Your day!",
+        "summary": "Write about your day!",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "18a2f28870534df282457616c84a32c1",
+      "content": "Write about your day!",
+      "createdAt": "2026-05-28T09:05:50.216643+00:00",
+      "updatedAt": "2026-05-28T09:05:50.216643+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Your day!",
+        "summary": "Write about your day!",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "4c24e7bc6a374b5c9bf9ae76dad7e866",
+      "content": "Test entry for MindBridge",
+      "createdAt": "2026-05-28T09:06:08.433123+00:00",
+      "updatedAt": "2026-05-28T09:06:08.433123+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Test entry for",
+        "summary": "Test entry for MindBridge",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "2315a08d4fcd4fc49e44b4c314cdc563",
+      "content": "bad day not went well \n",
+      "createdAt": "2026-05-28T09:15:37.208332+00:00",
+      "updatedAt": "2026-05-28T09:18:52.947807+00:00",
+      "analysis": {
+        "mood": "distressed",
+        "subject": "Bad day not",
+        "summary": "bad day not went well",
+        "color": "#F97316",
+        "sentimentScore": -4,
+        "negative": true
+      }
+    },
+    {
+      "id": "c9c19949d6684a38a2ee9c895403cea1",
+      "content": "Write about your day!",
+      "createdAt": "2026-05-28T09:16:09.779384+00:00",
+      "updatedAt": "2026-05-28T09:16:09.779384+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Your day!",
+        "summary": "Write about your day!",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "1cc09b019eb3408ba27817ebd1d5c326",
+      "content": "bad day",
+      "createdAt": "2026-05-28T09:17:02.268021+00:00",
+      "updatedAt": "2026-05-28T09:17:02.268021+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Bad day",
+        "summary": "bad day",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "516a93c8094f42f18ba7cc7e5db5a6c8",
+      "content": "Write about your day!",
+      "createdAt": "2026-05-28T09:18:41.437418+00:00",
+      "updatedAt": "2026-05-28T09:18:41.437418+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Your day!",
+        "summary": "Write about your day!",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "a3fa2f52a25142c38f87316bec5c7335",
+      "content": "Write about your day!",
+      "createdAt": "2026-05-28T09:18:55.953410+00:00",
+      "updatedAt": "2026-05-28T09:18:55.953410+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Your day!",
+        "summary": "Write about your day!",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    }
+  ]
+}
