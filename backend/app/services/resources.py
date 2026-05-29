@@ -54,6 +54,26 @@ RESOURCE_ITEMS: list[dict[str, str | None]] = [
         "location": None,
         "phone": None,
     },
+    {
+        "id": "conversation-starters",
+        "title": "Conversation starter cards",
+        "description": "Simple ways to start a supportive conversation with a friend or family member.",
+        "url": "https://www.mind.org.uk/information-support/types-of-mental-health-problems/mental-health-problems-and-stigma/talking-about-mental-health/",
+        "topic": "conversation",
+        "urgency": "self-care",
+        "location": None,
+        "phone": None,
+    },
+    {
+        "id": "mentor-message",
+        "title": "Message a peer mentor",
+        "description": "Draft a short check-in message for a trusted mentor or peer.",
+        "url": None,
+        "topic": "conversation",
+        "urgency": "self-care",
+        "location": None,
+        "phone": None,
+    },
 ]
 
 CRISIS_RESOURCES: list[dict[str, str | None]] = [

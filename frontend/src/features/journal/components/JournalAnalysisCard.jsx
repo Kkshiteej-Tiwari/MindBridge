@@ -46,6 +46,13 @@ export function JournalAnalysisCard({ analysis }) {
           </li>
         ))}
       </ul>
+
+      {analysis.reflectionPrompt ? (
+        <div className="mt-5 rounded-2xl border border-reef/30 bg-reef/10 p-4">
+          <p className="text-xs uppercase tracking-[0.25em] text-ink/50">Reflection prompt</p>
+          <p className="mt-2 text-sm text-ink/80">{analysis.reflectionPrompt}</p>
+        </div>
+      ) : null}
     </aside>
   );
 }

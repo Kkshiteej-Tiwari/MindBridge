@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { VoiceWave } from "./VoiceWave";
 
 function formatTimestamp(value) {
   return new Date(value).toLocaleString(undefined, {
@@ -14,6 +15,11 @@ function formatTimestamp(value) {
 export function JournalEditor({ entry, onSave, saving }) {
   const [content, setContent] = useState(entry?.content ?? "");
   const [localSaving, setLocalSaving] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [supportsVoice, setSupportsVoice] = useState(false);
+  const [voiceError, setVoiceError] = useState("");
+  const recognitionRef = useRef(null);
+  const finalTranscriptRef = useRef("");
   const debounceRef = useRef(null);
   const hydratedEntryIdRef = useRef(entry?.id ?? null);
 
@@ -21,6 +27,57 @@ export function JournalEditor({ entry, onSave, saving }) {
     setContent(entry?.content ?? "");
     hydratedEntryIdRef.current = entry?.id ?? null;
   }, [entry?.id, entry?.content]);
+
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      return undefined;
+    }
+
+    setSupportsVoice(true);
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (event) => {
+      let interim = "";
+      let finalText = finalTranscriptRef.current;
+
+      for (let i = event.resultIndex; i < event.results.length; i += 1) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalText += `${transcript.trim()} `;
+        } else {
+          interim += transcript;
+        }
+      }
+
+      finalTranscriptRef.current = finalText;
+      setContent((current) => `${finalText}${interim}`.trimStart());
+    };
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+      setVoiceError("");
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.onerror = (event) => {
+      setIsRecording(false);
+      setVoiceError(event?.error || "Microphone access blocked.");
+    };
+
+    recognitionRef.current = recognition;
+
+    return () => {
+      recognition.stop();
+    };
+  }, []);
 
   useEffect(() => {
     if (!entry?.id) {
@@ -60,6 +117,25 @@ export function JournalEditor({ entry, onSave, saving }) {
     return null;
   }
 
+  const toggleRecording = () => {
+    if (!recognitionRef.current) {
+      setVoiceError("Voice journaling needs a browser that supports speech recognition.");
+      return;
+    }
+    if (isRecording) {
+      recognitionRef.current.stop();
+      return;
+    }
+    finalTranscriptRef.current = content ? `${content.trim()} ` : "";
+    try {
+      recognitionRef.current.start();
+      setVoiceError("");
+    } catch (error) {
+      setVoiceError("Unable to start voice capture. Please allow microphone access.");
+      setIsRecording(false);
+    }
+  };
+
   return (
     <section className="rounded-3xl border border-ink/10 bg-white/70 p-5 shadow-xl shadow-ink/10 backdrop-blur-md md:p-6">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -67,10 +143,30 @@ export function JournalEditor({ entry, onSave, saving }) {
           <p className="text-xs uppercase tracking-[0.3em] text-ink/50">Your Safe Space</p>
           <h3 className="mt-2 font-display text-2xl font-semibold text-ink md:text-3xl">Mood journal</h3>
         </div>
-        <div className="rounded-full border border-reef/30 bg-reef/15 px-4 py-2 text-sm text-reef">
-          {localSaving || saving ? "Saving..." : `Last updated ${formatTimestamp(entry.updatedAt)}`}
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={toggleRecording}
+            disabled={!supportsVoice}
+            className={`flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition ${
+              isRecording
+                ? "border-coral/40 bg-coral/15 text-coral"
+                : "border-reef/40 bg-reef/10 text-reef"
+            } disabled:cursor-not-allowed disabled:opacity-60`}
+          >
+            <VoiceWave active={isRecording} />
+            {isRecording ? "Recording" : "Voice note"}
+          </button>
+          <div className="rounded-full border border-reef/30 bg-reef/15 px-4 py-2 text-sm text-reef">
+            {localSaving || saving ? "Saving..." : `Last updated ${formatTimestamp(entry.updatedAt)}`}
+          </div>
         </div>
       </div>
+
+      {!supportsVoice ? (
+        <p className="mb-3 text-xs text-ink/60">Voice journaling works best in Chrome or Edge with microphone permission.</p>
+      ) : null}
+      {voiceError ? <p className="mb-3 text-xs text-coral">{voiceError}</p> : null}
 
       <label className="mb-3 block text-sm text-ink/70">Write about your day</label>
       <motion.textarea

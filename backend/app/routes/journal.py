@@ -22,7 +22,7 @@ def read_entries() -> JournalListResponse:
 
 @router.post("", response_model=JournalResponse, status_code=status.HTTP_201_CREATED)
 def create_journal_entry(payload: JournalCreateRequest | None = None) -> JournalResponse:
-    content = payload.content if payload else "Write about your day!"
+    content = payload.content if payload else ""
     entry = create_entry(content=content)
     return JournalResponse(data=entry)
 

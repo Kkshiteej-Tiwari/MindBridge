@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { completeChallenge, fetchDailyChallenges } from "./services/challengesApi";
+import { StreakHeatmap } from "./components/StreakHeatmap";
 
 export function ChallengesPage() {
   const [challenges, setChallenges] = useState([]);
@@ -89,6 +90,12 @@ export function ChallengesPage() {
                   ) : (
                     <span className="text-sm text-ink/60">Complete streaks to unlock badges.</span>
                   )}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-ink">Streak heatmap</p>
+                <div className="mt-2 rounded-2xl border border-ink/10 bg-white p-3">
+                  <StreakHeatmap streak={progress.streak} />
                 </div>
               </div>
             </div>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { createCommunityPost, fetchCommunityFeed, reactToPost } from "./services/communityApi";
+import { PeerChatPanel } from "./PeerChatPanel";
 
 const topics = ["All", "Exams", "Relationships", "Loneliness", "Career", "Family", "General"];
 const moods = ["calm", "neutral", "stressed", "hopeful"];
@@ -204,6 +205,8 @@ export function CommunityPage() {
           )}
         </div>
       </div>
+
+      <PeerChatPanel />
     </section>
   );
 }

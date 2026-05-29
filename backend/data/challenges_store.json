@@ -2,13 +2,16 @@
   "completed": {
     "2026-05-28": [
       "journal"
+    ],
+    "2026-05-29": [
+      "breathing"
     ]
   },
   "progress": {
-    "streak": 1,
-    "xp": 20,
+    "streak": 2,
+    "xp": 35,
     "level": 1,
     "badges": [],
-    "lastCompletedDate": "2026-05-28"
+    "lastCompletedDate": "2026-05-29"
   }
 }

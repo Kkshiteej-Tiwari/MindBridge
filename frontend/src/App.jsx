@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import { motion } from "framer-motion";
+import { OnboardingPage } from "./features/onboarding/OnboardingPage";
+import { DashboardPage } from "./features/dashboard/DashboardPage";
 import { JournalPage } from "./features/journal/JournalPage";
 import { CoachPage } from "./features/coach/CoachPage";
 import { CommunityPage } from "./features/community/CommunityPage";
@@ -8,6 +11,7 @@ import { ResourcesPage } from "./features/resources/ResourcesPage";
 import { StressPage } from "./features/stress/StressPage";
 
 const navItems = [
+  { to: "/dashboard", label: "Dashboard" },
 	{ to: "/", label: "Journal" },
 	{ to: "/coach", label: "Coach" },
 	{ to: "/stress", label: "Stress" },
@@ -17,6 +21,14 @@ const navItems = [
 ];
 
 function App() {
+	const [onboarded, setOnboarded] = useState(
+		() => localStorage.getItem("mindbridgeOnboarded") === "true",
+	);
+
+	if (!onboarded) {
+		return <OnboardingPage onComplete={() => setOnboarded(true)} />;
+	}
+
 	return (
 		<div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(46,196,182,0.18),_transparent_40%),radial-gradient(circle_at_20%_10%,_rgba(255,122,106,0.2),_transparent_35%),linear-gradient(180deg,_#f7f4ef_0%,_#f3f1ea_55%,_#e9f3ef_100%)] text-ink">
 			<header className="sticky top-0 z-30 border-b border-ink/10 bg-white/70 backdrop-blur-xl">
@@ -53,6 +65,7 @@ function App() {
 				className="mx-auto w-full max-w-6xl px-4 pb-16 pt-6"
 			>
 				<Routes>
+					<Route path="/dashboard" element={<DashboardPage />} />
 					<Route path="/" element={<JournalPage />} />
 					<Route path="/coach" element={<CoachPage />} />
 					<Route path="/stress" element={<StressPage />} />

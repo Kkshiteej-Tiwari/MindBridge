@@ -15,6 +15,8 @@ const quickActions = [
   { label: "I feel overwhelmed", message: "I feel overwhelmed and stuck." },
   { label: "Help me focus", message: "I am struggling to focus on my tasks." },
   { label: "I feel lonely", message: "I feel lonely and disconnected." },
+  { label: "Talk to someone", message: "I want to talk to someone." },
+  { label: "I am okay now", message: "I am okay now." },
 ];
 
 const createId = () => {
@@ -151,9 +153,13 @@ export function CoachPage() {
 
   const showTyping = loading && !streamingId;
   const isBusy = loading || Boolean(streamingId);
+  const crisisActive = riskLevel === "crisis";
 
   return (
-    <section className="space-y-6">
+    <section className="relative space-y-6">
+      {crisisActive ? (
+        <div className="pointer-events-none absolute inset-0 rounded-3xl border border-coral/30 bg-coral/10 shadow-[0_0_80px_rgba(255,122,106,0.25)]" />
+      ) : null}
       <header className="rounded-3xl border border-ink/10 bg-white/70 p-6 shadow-xl shadow-ink/10 backdrop-blur-md">
         <p className="text-xs uppercase tracking-[0.3em] text-ink/50">AI Wellness Coach</p>
         <h2 className="mt-2 font-display text-3xl font-semibold text-ink">Talk it out, one step at a time</h2>
@@ -181,7 +187,7 @@ export function CoachPage() {
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
-        <div className="rounded-3xl border border-ink/10 bg-white/80 p-5 shadow-xl shadow-ink/10 backdrop-blur-md">
+        <div className="relative rounded-3xl border border-ink/10 bg-white/80 p-5 shadow-xl shadow-ink/10 backdrop-blur-md">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-ink/50">Conversation</p>
@@ -268,6 +274,14 @@ export function CoachPage() {
               {loading ? "Thinking..." : streamingId ? "Streaming..." : "Send"}
             </button>
           </form>
+
+          <button
+            type="button"
+            onClick={() => window.location.assign("/resources")}
+            className="absolute -bottom-5 right-6 rounded-full bg-coral px-4 py-2 text-xs font-semibold text-cream shadow-lg shadow-coral/30"
+          >
+            SOS resources
+          </button>
         </div>
 
         <aside className="space-y-5">

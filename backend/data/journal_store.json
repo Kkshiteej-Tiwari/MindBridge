@@ -128,16 +128,18 @@
     },
     {
       "id": "a3fa2f52a25142c38f87316bec5c7335",
-      "content": "I feel exhausted and hopeless about exam\ns.",
+      "content": "",
       "createdAt": "2026-05-28T09:18:55.953410+00:00",
-      "updatedAt": "2026-05-28T11:26:19.170248+00:00",
+      "updatedAt": "2026-05-29T09:24:37.071122+00:00",
       "analysis": {
-        "mood": "distressed",
-        "subject": "Exam",
-        "summary": "I feel exhausted and hopeless about exam\ns.",
-        "color": "#F97316",
-        "sentimentScore": -5,
-        "negative": true
+        "mood": "neutral",
+        "subject": "Daily Reflection",
+        "summary": "This entry is ready for reflection.",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false,
+        "riskLevel": "neutral",
+        "reflectionPrompt": "Name one moment today that felt steady or okay."
       }
     }
   ]

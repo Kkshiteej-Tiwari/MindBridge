@@ -6,7 +6,7 @@ from pathlib import Path
 from threading import Lock
 from uuid import uuid4
 
-from .analysis import analyze_content
+from .analysis import analyze_text
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 DATA_FILE = BASE_DIR / "data" / "journal_store.json"
@@ -69,7 +69,7 @@ def create_entry(content: str = "") -> dict[str, object]:
     with STORE_LOCK:
         state = _read_state()
         now = _now()
-        analysis = analyze_content(content)
+        analysis = analyze_text(content)
         entry = {
             "id": uuid4().hex,
             "content": content,
@@ -88,7 +88,7 @@ def update_entry(entry_id: str, content: str) -> dict[str, object]:
         for index, entry in enumerate(state["entries"]):
             if entry["id"] == entry_id:
                 now = _now()
-                analysis = analyze_content(content)
+                analysis = analyze_text(content)
                 updated_entry = {
                     **entry,
                     "content": content,

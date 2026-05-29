@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { fetchCrisisResources, fetchResources } from "./services/resourcesApi";
 
-const topics = ["all", "grounding", "academic", "sleep", "support"];
+const topics = ["all", "grounding", "academic", "sleep", "support", "conversation"];
 
 export function ResourcesPage() {
   const [resources, setResources] = useState([]);

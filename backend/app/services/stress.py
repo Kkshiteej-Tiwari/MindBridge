@@ -12,10 +12,11 @@ def _event_score(days_until: int, weight: float, horizon: int) -> float:
     return weight * (0.2 + 0.8 * ramp)
 
 
-def build_forecast(events: list[StressEvent], days: int = 14) -> tuple[list[dict[str, object]], str]:
+def build_forecast(events: list[StressEvent], days: int = 14) -> tuple[list[dict[str, object]], str, list[str], list[str]]:
     horizon = max(3, min(days, 30))
     start = date.today()
     scores: list[dict[str, object]] = []
+    check_ins: list[str] = []
 
     for offset in range(horizon):
         day = start + timedelta(days=offset)
@@ -32,10 +33,19 @@ def build_forecast(events: list[StressEvent], days: int = 14) -> tuple[list[dict
             label = "Watch"
         else:
             label = "Calm"
+        if label in {"Peak", "Elevated"}:
+            check_ins.append(
+                "{} looks intense. Schedule a 10 minute reset and a short walk.".format(day.strftime("%b %d"))
+            )
         scores.append({"date": day, "score": round(total, 2), "label": label})
 
     summary = "Stress forecast updated for the next {} days.".format(horizon)
-    return scores, summary
+    recommendations = [
+        "Block 25 minute focus sessions and add 5 minute breaks.",
+        "Let a friend know your peak stress day so they can check in.",
+        "Pick one calming activity you can do the night before a deadline.",
+    ]
+    return scores, summary, check_ins[:5], recommendations
 
 
 def default_events() -> list[StressEvent]:

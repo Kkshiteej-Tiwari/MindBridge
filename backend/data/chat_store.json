@@ -384,6 +384,24 @@
           "createdAt": "2026-05-28T11:23:17.196834+00:00"
         }
       ]
+    },
+    {
+      "id": "b0e6e138be9e43be9aef72d313e137df",
+      "createdAt": "2026-05-29T09:28:26.524419+00:00",
+      "messages": [
+        {
+          "role": "user",
+          "content": "i am feeling distreseed",
+          "tags": [],
+          "createdAt": "2026-05-29T09:28:26.550946+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "I hear you. That can feel overwhelming. Would you like to try a short breathing reset together?",
+          "tags": [],
+          "createdAt": "2026-05-29T09:28:26.564821+00:00"
+        }
+      ]
     }
   ]
 }

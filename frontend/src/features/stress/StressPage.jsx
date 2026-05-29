@@ -24,6 +24,8 @@ export function StressPage() {
   const [type, setType] = useState("exam");
   const [forecast, setForecast] = useState([]);
   const [summary, setSummary] = useState("");
+  const [checkIns, setCheckIns] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -34,6 +36,8 @@ export function StressPage() {
       const response = await forecastStress(payload);
       setForecast(response.data || []);
       setSummary(response.summary || "");
+      setCheckIns(response.check_ins || response.checkIns || []);
+      setRecommendations(response.recommendations || []);
     } catch (forecastError) {
       setError(forecastError.message || "Unable to load stress forecast.");
     } finally {
@@ -166,6 +170,37 @@ export function StressPage() {
                 <Area type="monotone" dataKey="score" stroke="#2EC4B6" fill="rgba(46,196,182,0.25)" />
               </AreaChart>
             </ResponsiveContainer>
+          </div>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <div className="rounded-3xl border border-ink/10 bg-white px-4 py-4 text-sm text-ink/70">
+              <p className="text-xs uppercase tracking-[0.3em] text-ink/50">Check-ins</p>
+              <ul className="mt-3 space-y-2">
+                {checkIns.length ? (
+                  checkIns.map((item) => (
+                    <li key={item} className="rounded-2xl border border-ink/10 bg-foam px-3 py-2">
+                      {item}
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-ink/60">No high-stress check-ins yet.</li>
+                )}
+              </ul>
+            </div>
+            <div className="rounded-3xl border border-ink/10 bg-white px-4 py-4 text-sm text-ink/70">
+              <p className="text-xs uppercase tracking-[0.3em] text-ink/50">Recommendations</p>
+              <ul className="mt-3 space-y-2">
+                {recommendations.length ? (
+                  recommendations.map((item) => (
+                    <li key={item} className="rounded-2xl border border-ink/10 bg-foam px-3 py-2">
+                      {item}
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-ink/60">Keep your routine light and steady.</li>
+                )}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

@@ -1,16 +1,27 @@
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass
 
 
 CRISIS_WORDS = {
     "suicide",
+    "suicidal",
     "kill myself",
+    "kill me",
+    "want to die",
+    "end my life",
     "hurt myself",
     "self harm",
     "self-harm",
     "end it all",
+    "cant go on",
+    "can't go on",
+    "no reason to live",
+    "overdose",
+    "die tonight",
+    "die today",
 }
 
 NEGATIVE_WORDS = {
@@ -67,6 +78,16 @@ MOOD_COLORS = {
     "positive": "#00D4AA",
 }
 
+PROMPTS_BY_MOOD = {
+    "crisis": "You are not alone. If you can, write one small reason to stay safe right now.",
+    "distressed": "What is one small thing that could make the next hour 1% easier?",
+    "neutral": "Name one moment today that felt steady or okay.",
+    "positive": "What helped you feel this way today, and how can you repeat it tomorrow?",
+}
+
+HF_DEFAULT_MODEL = "cardiffnlp/twitter-roberta-base-sentiment-latest"
+_HF_PIPELINE = None
+
 
 @dataclass(frozen=True)
 class AnalysisResult:
@@ -76,6 +97,8 @@ class AnalysisResult:
     color: str
     sentiment_score: int
     negative: bool
+    risk_level: str
+    reflection_prompt: str
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -85,6 +108,8 @@ class AnalysisResult:
             "color": self.color,
             "sentimentScore": self.sentiment_score,
             "negative": self.negative,
+            "riskLevel": self.risk_level,
+            "reflectionPrompt": self.reflection_prompt,
         }
 
 
@@ -109,6 +134,28 @@ def _build_summary(content: str) -> str:
     if len(summary) > 140:
         summary = summary[:137].rstrip() + "..."
     return summary
+
+
+def _build_reflection_prompt(mood: str, subject: str) -> str:
+    prompt = PROMPTS_BY_MOOD.get(mood, PROMPTS_BY_MOOD["neutral"])
+    if subject and subject != "Daily Reflection":
+        return f"{prompt} (Topic: {subject})"
+    return prompt
+
+
+def _load_hf_pipeline():
+    global _HF_PIPELINE
+    if _HF_PIPELINE is not None:
+        return _HF_PIPELINE
+
+    model_name = os.getenv("HF_MODEL", HF_DEFAULT_MODEL)
+    try:
+        from transformers import pipeline
+    except Exception:
+        return None
+
+    _HF_PIPELINE = pipeline("sentiment-analysis", model=model_name)
+    return _HF_PIPELINE
 
 
 def analyze_content(content: str) -> AnalysisResult:
@@ -141,6 +188,8 @@ def analyze_content(content: str) -> AnalysisResult:
 
     subject = _extract_subject(content)
     summary = _build_summary(content)
+    reflection_prompt = _build_reflection_prompt(mood, subject)
+    risk_level = "crisis" if mood == "crisis" else "distressed" if negative else "neutral"
 
     return AnalysisResult(
         mood=mood,
@@ -149,6 +198,57 @@ def analyze_content(content: str) -> AnalysisResult:
         color=color,
         sentiment_score=sentiment_score,
         negative=negative,
+        risk_level=risk_level,
+        reflection_prompt=reflection_prompt,
+    )
+
+
+def analyze_text(content: str) -> AnalysisResult:
+    if not content.strip():
+        return analyze_content(content)
+
+    if os.getenv("ENABLE_HF", "false").lower() not in {"1", "true", "yes"}:
+        return analyze_content(content)
+
+    pipeline_fn = _load_hf_pipeline()
+    if not pipeline_fn:
+        return analyze_content(content)
+
+    try:
+        result = pipeline_fn(content[:512])[0]
+        label = str(result.get("label", "")).lower()
+        score = float(result.get("score", 0))
+    except Exception:
+        return analyze_content(content)
+
+    if classify_risk(content) == "crisis":
+        return analyze_content(content)
+
+    if "negative" in label:
+        mood = "distressed"
+        sentiment_score = -5 if score < 0.6 else -7
+    elif "positive" in label:
+        mood = "positive"
+        sentiment_score = 5 if score < 0.6 else 7
+    else:
+        mood = "neutral"
+        sentiment_score = 0
+
+    subject = _extract_subject(content)
+    summary = _build_summary(content)
+    reflection_prompt = _build_reflection_prompt(mood, subject)
+    risk_level = "distressed" if mood == "distressed" else "neutral"
+    negative = mood == "distressed"
+
+    return AnalysisResult(
+        mood=mood,
+        subject=subject,
+        summary=summary,
+        color=MOOD_COLORS[mood],
+        sentiment_score=sentiment_score,
+        negative=negative,
+        risk_level=risk_level,
+        reflection_prompt=reflection_prompt,
     )
 
 

@@ -12,6 +12,8 @@ class JournalAnalysis(BaseModel):
     color: str
     sentiment_score: int = Field(alias="sentimentScore")
     negative: bool
+    risk_level: str | None = Field(default=None, alias="riskLevel")
+    reflection_prompt: str | None = Field(default=None, alias="reflectionPrompt")
 
     model_config = {
         "populate_by_name": True,

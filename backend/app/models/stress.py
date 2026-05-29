@@ -26,3 +26,5 @@ class StressForecastRequest(BaseModel):
 class StressForecastResponse(BaseModel):
     data: list[StressPoint]
     summary: str
+    check_ins: list[str] = []
+    recommendations: list[str] = []
