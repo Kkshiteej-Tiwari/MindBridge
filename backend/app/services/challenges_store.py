@@ -3,11 +3,11 @@ from __future__ import annotations
 import json
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from threading import Lock
+from threading import RLock
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 DATA_FILE = BASE_DIR / "data" / "challenges_store.json"
-STORE_LOCK = Lock()
+STORE_LOCK = RLock()
 
 DEFAULT_CHALLENGES: list[dict[str, object]] = [
     {

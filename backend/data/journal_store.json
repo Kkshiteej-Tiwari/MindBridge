@@ -72,16 +72,16 @@
     },
     {
       "id": "2315a08d4fcd4fc49e44b4c314cdc563",
-      "content": "bad day not went well \n",
+      "content": "happy day",
       "createdAt": "2026-05-28T09:15:37.208332+00:00",
-      "updatedAt": "2026-05-28T09:18:52.947807+00:00",
+      "updatedAt": "2026-05-28T11:38:44.135924+00:00",
       "analysis": {
-        "mood": "distressed",
-        "subject": "Bad day not",
-        "summary": "bad day not went well",
-        "color": "#F97316",
-        "sentimentScore": -4,
-        "negative": true
+        "mood": "positive",
+        "subject": "Happy day",
+        "summary": "happy day",
+        "color": "#00D4AA",
+        "sentimentScore": 4,
+        "negative": false
       }
     },
     {
@@ -140,6 +140,62 @@
         "negative": false,
         "riskLevel": "neutral",
         "reflectionPrompt": "Name one moment today that felt steady or okay."
+      }
+    },
+    {
+      "id": "d386be943051420e94a6ba5d3a5ee8c5",
+      "content": "happy day went well\n",
+      "createdAt": "2026-05-28T11:38:48.879676+00:00",
+      "updatedAt": "2026-05-28T12:29:43.102866+00:00",
+      "analysis": {
+        "mood": "positive",
+        "subject": "Happy day went",
+        "summary": "happy day went well",
+        "color": "#00D4AA",
+        "sentimentScore": 4,
+        "negative": false
+      }
+    },
+    {
+      "id": "313b903c7a8d406abdf8c165cb07a17c",
+      "content": "good ",
+      "createdAt": "2026-05-28T12:29:43.396379+00:00",
+      "updatedAt": "2026-05-28T12:46:51.560995+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Good",
+        "summary": "good",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "079eb27b01654376bb2f62ce460e31e9",
+      "content": "Write about your day!",
+      "createdAt": "2026-05-28T12:47:03.016766+00:00",
+      "updatedAt": "2026-05-28T12:47:03.016766+00:00",
+      "analysis": {
+        "mood": "neutral",
+        "subject": "Your day!",
+        "summary": "Write about your day!",
+        "color": "#F7B731",
+        "sentimentScore": 0,
+        "negative": false
+      }
+    },
+    {
+      "id": "70bcd0a4db844dcb894cef16da8b4f91",
+      "content": "I feel calm and focused today.",
+      "createdAt": "2026-05-28T17:26:25.834151+00:00",
+      "updatedAt": "2026-05-28T17:26:25.834151+00:00",
+      "analysis": {
+        "mood": "positive",
+        "subject": "I feel calm",
+        "summary": "I feel calm and focused today.",
+        "color": "#00D4AA",
+        "sentimentScore": 4,
+        "negative": false
       }
     }
   ]
