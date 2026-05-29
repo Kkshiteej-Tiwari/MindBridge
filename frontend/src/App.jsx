@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import { motion } from "framer-motion";
 import { OnboardingPage } from "./features/onboarding/OnboardingPage";
 import { DashboardPage } from "./features/dashboard/DashboardPage";
@@ -9,15 +9,17 @@ import { CommunityPage } from "./features/community/CommunityPage";
 import { ChallengesPage } from "./features/challenges/ChallengesPage";
 import { ResourcesPage } from "./features/resources/ResourcesPage";
 import { StressPage } from "./features/stress/StressPage";
+import { SOSPage } from "./features/sos/SOSPage";
+import { SOSButton } from "./components/SOSButton";
 
 const navItems = [
-  { to: "/dashboard", label: "Dashboard" },
-	{ to: "/", label: "Journal" },
-	{ to: "/coach", label: "Coach" },
-	{ to: "/stress", label: "Stress" },
-	{ to: "/community", label: "Community" },
-	{ to: "/challenges", label: "Challenges" },
-	{ to: "/resources", label: "Resources" },
+  { to: "/dashboard", label: "Dashboard", icon: "◉" },
+	{ to: "/", label: "Journal", icon: "✎" },
+	{ to: "/coach", label: "Coach", icon: "💬" },
+	{ to: "/stress", label: "Stress", icon: "📊" },
+	{ to: "/community", label: "Community", icon: "👥" },
+	{ to: "/challenges", label: "Challenges", icon: "🏆" },
+	{ to: "/resources", label: "Resources", icon: "📚" },
 ];
 
 function App() {
@@ -51,6 +53,7 @@ function App() {
 									}`
 								}
 							>
+								<span className="mr-1.5">{item.icon}</span>
 								{item.label}
 							</NavLink>
 						))}
@@ -72,8 +75,12 @@ function App() {
 					<Route path="/community" element={<CommunityPage />} />
 					<Route path="/challenges" element={<ChallengesPage />} />
 					<Route path="/resources" element={<ResourcesPage />} />
+					<Route path="/sos" element={<SOSPage />} />
+					<Route path="*" element={<Navigate to="/" replace />} />
 				</Routes>
 			</motion.main>
+
+			<SOSButton />
 		</div>
 	);
 }

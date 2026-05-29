@@ -25,6 +25,11 @@ FALLBACK_RESPONSES = [
     "Would you like to try a short breathing reset together?",
     "That makes sense. You are not alone in this. "
     "What would feel like a gentle next step for you right now?",
+    "I appreciate you opening up. "
+    "You are handling more than you might realize. "
+    "What is one kind thing you could do for yourself today?",
+    "I am here and I am listening. "
+    "Is there a part of this we can break into something smaller together?",
 ]
 
 AFFIRMATIVE_PHRASES = {
@@ -252,3 +257,68 @@ def generate_reply(message: str, session_id: str | None = None, history: list[ob
         "resources": resources,
         "updatedAt": datetime.now(timezone.utc).isoformat(),
     }
+
+
+def stream_reply_chunks(message: str, session_id: str | None = None, history: list[object] | None = None):
+    """Generator that yields SSE chunks for streaming chat responses."""
+    if not session_id:
+        session_id = create_session()["id"]
+
+    risk_level = classify_risk(message)
+    tags = _infer_tags(message)
+    resources = get_crisis_resources("India") if risk_level == "crisis" else []
+
+    if history is not None:
+        base_history = [
+            item.model_dump(by_alias=True) if hasattr(item, "model_dump") else item
+            for item in history
+        ]
+    else:
+        base_history = get_session_messages(session_id)
+
+    client = _openai_client()
+    reply_text = ""
+
+    if client and risk_level != "crisis":
+        model_name = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        prompt_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        prompt_messages.extend(_build_history(base_history))
+        prompt_messages.append({"role": "user", "content": message})
+        try:
+            stream = client.chat.completions.create(
+                model=model_name,
+                messages=prompt_messages,
+                temperature=0.4,
+                stream=True,
+            )
+            for chunk in stream:
+                delta = chunk.choices[0].delta if chunk.choices else None
+                if delta and delta.content:
+                    reply_text += delta.content
+                    yield {"type": "delta", "text": delta.content}
+        except Exception:
+            reply_text = _fallback_reply(message, risk_level, base_history)
+            for word in reply_text.split():
+                yield {"type": "delta", "text": word + " "}
+    else:
+        reply_text = _fallback_reply(message, risk_level, base_history)
+        for word in reply_text.split():
+            yield {"type": "delta", "text": word + " "}
+
+    suggested_actions = SUGGESTED_ACTIONS.get(risk_level, [])
+    append_message(session_id, "user", message)
+    append_message(session_id, "assistant", reply_text, tags=tags)
+
+    yield {
+        "type": "done",
+        "data": {
+            "sessionId": session_id,
+            "reply": reply_text,
+            "riskLevel": risk_level,
+            "tags": tags,
+            "suggestedActions": suggested_actions,
+            "resources": resources,
+            "updatedAt": datetime.now(timezone.utc).isoformat(),
+        },
+    }
+

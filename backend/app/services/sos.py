@@ -82,7 +82,9 @@ def route_sos(payload: SOSRouteRequest) -> SOSRouteResponse:
 
     steps = _build_steps(payload.risk_level)
     if primary_resource and primary_resource.get("url"):
-        primary_action.href = primary_resource["url"]
+        # Only override href with URL for non-phone-call cases
+        if payload.risk_level not in ("crisis", "distressed"):
+            primary_action.href = primary_resource["url"]
 
     return SOSRouteResponse(
         title=title,

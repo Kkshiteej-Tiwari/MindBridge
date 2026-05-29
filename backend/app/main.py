@@ -10,6 +10,8 @@ from .routes.resources import router as resources_router
 from .routes.stress import router as stress_router
 from .routes.analysis import router as analysis_router
 from .routes.peer_chat import router as peer_chat_router
+from .routes.sentiment import router as sentiment_router
+from .routes.sos import router as sos_router
 
 app = FastAPI(title="MindBridge Backend", version="0.1.0")
 
@@ -30,3 +32,5 @@ app.include_router(resources_router)
 app.include_router(stress_router)
 app.include_router(analysis_router)
 app.include_router(peer_chat_router)
+app.include_router(sentiment_router)
+app.include_router(sos_router)
