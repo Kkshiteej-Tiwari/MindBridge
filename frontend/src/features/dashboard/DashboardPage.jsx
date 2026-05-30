@@ -6,10 +6,10 @@ import { fetchDashboardSnapshot } from "./services/dashboardApi";
 import { HistoryChart } from "../journal/components/HistoryChart";
 
 const orbitCards = [
-  { to: "/", label: "Journal", icon: "✎", color: "bg-reef/10 border-reef/30 text-reef" },
-  { to: "/coach", label: "Coach", icon: "💬", color: "bg-violet/10 border-violet/30 text-violet" },
-  { to: "/community", label: "Community", icon: "👥", color: "bg-sky/10 border-sky/30 text-sky" },
-  { to: "/challenges", label: "Challenges", icon: "🏆", color: "bg-gold/10 border-gold/30 text-gold" },
+  { to: "/", label: "Journal", icon: "", color: "bg-reef/10 border-reef/30 text-reef" },
+  { to: "/coach", label: "Coach", icon: "", color: "bg-violet/10 border-violet/30 text-violet" },
+  { to: "/community", label: "Community", icon: "", color: "bg-sky/10 border-sky/30 text-sky" },
+  { to: "/challenges", label: "Challenges", icon: "", color: "bg-gold/10 border-gold/30 text-gold" },
 ];
 
 const dailyPrompts = [
@@ -137,16 +137,14 @@ export function DashboardPage() {
           <h3 className="mt-2 font-display text-xl font-semibold text-ink">Wellness momentum</h3>
           {progress ? (
             <div className="mt-4 space-y-3">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 rounded-full border border-ink/10 bg-foam px-4 py-2">
-                  <span className="text-lg">🔥</span>
-                  <span className="text-sm font-semibold text-ink">{progress.streak} day streak</span>
-                </div>
-                <div className="flex items-center gap-2 rounded-full border border-ink/10 bg-reef/10 px-4 py-2">
-                  <span className="text-lg">⚡</span>
-                  <span className="text-sm font-semibold text-reef">{progress.xp} XP</span>
-                </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 rounded-full border border-ink/10 bg-foam px-4 py-2">
+                <span className="text-sm font-semibold text-ink">{progress.streak} day streak</span>
               </div>
+              <div className="flex items-center gap-2 rounded-full border border-ink/10 bg-reef/10 px-4 py-2">
+                <span className="text-sm font-semibold text-reef">{progress.xp} XP</span>
+              </div>
+            </div>
               {progress.badges?.length ? (
                 <div className="flex flex-wrap gap-2">
                   {progress.badges.map((badge) => (
@@ -154,7 +152,7 @@ export function DashboardPage() {
                       key={badge}
                       className="badge-earned rounded-full border border-reef/30 bg-reef/10 px-3 py-1 text-xs font-semibold text-reef"
                     >
-                      🏅 {badge}
+                      {badge}
                     </span>
                   ))}
                 </div>
@@ -164,7 +162,7 @@ export function DashboardPage() {
             <p className="mt-4 text-sm text-ink/60">Keep showing up. Your streak starts today.</p>
           )}
           <div className="mt-4 rounded-2xl border border-ink/10 bg-foam px-4 py-3 text-sm text-ink/70">
-            💡 Tip: Schedule one calming routine before your next busy day.
+            Tip: Schedule one calming routine before your next busy day.
           </div>
         </motion.div>
 
@@ -181,10 +179,10 @@ export function DashboardPage() {
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link to="/" className="rounded-full bg-ink px-5 py-2.5 text-xs font-semibold text-cream transition hover:brightness-110">
-              ✎ Journal now
+              Journal now
             </Link>
             <Link to="/coach" className="rounded-full border border-ink/10 bg-white px-5 py-2.5 text-xs font-semibold text-ink/70 transition hover:bg-foam">
-              💬 Talk to coach
+              Talk to coach
             </Link>
           </div>
         </motion.div>

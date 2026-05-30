@@ -4,10 +4,10 @@ import { completeChallenge, fetchDailyChallenges } from "./services/challengesAp
 import { StreakHeatmap } from "./components/StreakHeatmap";
 
 const challengeIcons = {
-  journal: "✎",
-  breathing: "🫁",
-  gratitude: "🙏",
-  movement: "🏃",
+  journal: "J",
+  breathing: "B",
+  gratitude: "G",
+  movement: "M",
 };
 
 function ConfettiBurst({ show }) {
@@ -107,7 +107,7 @@ export function ChallengesPage() {
         <p className="text-xs uppercase tracking-[0.3em] text-ink/50">Gamified Wellness</p>
         <h2 className="mt-2 font-display text-3xl font-semibold text-ink">Daily challenges</h2>
         <p className="mt-3 max-w-3xl text-sm text-ink/70 md:text-base">
-          Complete gentle tasks, build streaks, and collect badges for your well-being journey. 🏆
+          Complete gentle tasks, build streaks, and collect badges for your well-being journey.
         </p>
 
         {/* Global XP bar */}
@@ -145,18 +145,16 @@ export function ChallengesPage() {
             <div className="mt-4 space-y-4">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 rounded-full border border-ink/10 bg-foam px-4 py-2.5">
-                  <span className="text-lg">🔥</span>
                   <span className="text-sm font-bold text-ink">{progress.streak}</span>
                   <span className="text-xs text-ink/60">day streak</span>
                 </div>
                 <div className="flex items-center gap-2 rounded-full border border-reef/30 bg-reef/10 px-4 py-2.5">
-                  <span className="text-lg">⚡</span>
                   <span className="text-sm font-bold text-reef">Lv.{progress.level}</span>
                 </div>
               </div>
 
               <div>
-                <p className="text-sm font-semibold text-ink">🏅 Badges</p>
+                <p className="text-sm font-semibold text-ink">Badges</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {progress.badges.length ? (
                     progress.badges.map((badge) => (
@@ -174,7 +172,7 @@ export function ChallengesPage() {
               </div>
 
               <div>
-                <p className="text-sm font-semibold text-ink">📊 Streak heatmap</p>
+                <p className="text-sm font-semibold text-ink">Streak heatmap</p>
                 <div className="mt-2 rounded-2xl border border-ink/10 bg-white p-3">
                   <StreakHeatmap streak={progress.streak} />
                 </div>
@@ -232,7 +230,7 @@ export function ChallengesPage() {
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-start gap-3">
                         <span className="mt-0.5 text-xl">
-                          {challengeIcons[challenge.category] || "✨"}
+                          {challengeIcons[challenge.category] || ""}
                         </span>
                         <div>
                           <p className={`text-sm font-semibold ${challenge.completed ? "text-reef line-through" : "text-ink"}`}>

@@ -13,13 +13,13 @@ import { SOSPage } from "./features/sos/SOSPage";
 import { SOSButton } from "./components/SOSButton";
 
 const navItems = [
-  { to: "/dashboard", label: "Dashboard", icon: "◉" },
-	{ to: "/", label: "Journal", icon: "✎" },
-	{ to: "/coach", label: "Coach", icon: "💬" },
-	{ to: "/stress", label: "Stress", icon: "📊" },
-	{ to: "/community", label: "Community", icon: "👥" },
-	{ to: "/challenges", label: "Challenges", icon: "🏆" },
-	{ to: "/resources", label: "Resources", icon: "📚" },
+	{ to: "/dashboard", label: "Dashboard", icon: "" },
+	{ to: "/", label: "Journal", icon: "" },
+	{ to: "/coach", label: "Coach", icon: "" },
+	{ to: "/stress", label: "Stress", icon: "" },
+	{ to: "/community", label: "Community", icon: "" },
+	{ to: "/challenges", label: "Challenges", icon: "" },
+	{ to: "/resources", label: "Resources", icon: "" },
 ];
 
 function App() {

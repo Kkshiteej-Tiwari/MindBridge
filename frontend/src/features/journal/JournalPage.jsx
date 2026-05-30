@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import WellnessOrb from "../dashboard/WellnessOrb";
 import { useJournalFeature } from "./hooks/useJournalFeature";
@@ -9,6 +9,11 @@ import { HistoryChart } from "./components/HistoryChart";
 export function JournalPage({ voiceMode = false }) {
   const { activeEntry, activeId, createDraft, error, history, loading, saveEntry, saving, selectEntry, entries } =
     useJournalFeature();
+  const [microActions, setMicroActions] = useState([]);
+
+  const handleMicroAction = (label) => {
+    setMicroActions((c) => [label, ...c].slice(0, 5));
+  };
   const editorAnchorRef = useRef(null);
 
   useEffect(() => {
@@ -64,12 +69,34 @@ export function JournalPage({ voiceMode = false }) {
       )}
 
       <section className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-        <HistoryChart data={history} />
+        <div className="space-y-6 -mt-40">
+          <div className="rounded-3xl border border-ink/10 bg-white/70 p-5 shadow-xl shadow-ink/10">
+            <p className="text-xs uppercase tracking-[0.3em] text-ink/50">Quick actions</p>
+            <h4 className="mt-2 font-display text-lg font-semibold text-ink">Micro-actions</h4>
+            <p className="mt-2 text-sm text-ink/70">Small, 1–5 minute activities that can help shift your mood.</p>
+            <div className="mt-3 flex flex-wrap gap-3">
+              <button type="button" onClick={() => handleMicroAction('2‑min breathing')} className="rounded-full border border-ink/10 bg-foam px-3 py-2 text-sm font-semibold text-ink">2‑min breathing</button>
+              <button type="button" onClick={() => handleMicroAction('Short stretch')} className="rounded-full border border-ink/10 bg-foam px-3 py-2 text-sm font-semibold text-ink">Short stretch</button>
+              <button type="button" onClick={() => handleMicroAction('Drink water')} className="rounded-full border border-ink/10 bg-foam px-3 py-2 text-sm font-semibold text-ink">Drink water</button>
+            </div>
+            {microActions.length ? (
+              <ul className="mt-3 space-y-2 text-sm text-ink/70">
+                {microActions.map((m, i) => (
+                  <li key={`${m}-${i}`} className="rounded-2xl border border-ink/10 bg-foam px-3 py-2">{m}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm text-ink/60">No actions yet — try a quick exercise above.</p>
+            )}
+          </div>
+
+          <HistoryChart data={history} />
+        </div>
 
         <aside className="rounded-3xl border border-ink/10 bg-white/70 p-5 shadow-xl shadow-ink/10 backdrop-blur-md md:p-6">
           <p className="text-xs uppercase tracking-[0.3em] text-ink/50">Entry switcher</p>
           <h3 className="mt-2 font-display text-2xl font-semibold text-ink">Recent drafts</h3>
-          <div className="mt-5 space-y-3">
+          <div className="mt-5 max-h-64 overflow-auto space-y-3 pr-2">
             {entries.map((entry) => (
               <button
                 key={entry.id}

@@ -29,7 +29,7 @@ export function OnboardingPage({ onComplete }) {
     if (!mood) {
       return "Click the color that feels closest to you right now.";
     }
-    return "Great choice. This helps MindBridge personalize your journey. ✨";
+    return "Great choice. This helps MindBridge personalize your journey.";
   }, [mood]);
 
   const handleContinue = () => {
@@ -74,7 +74,7 @@ export function OnboardingPage({ onComplete }) {
         />
       ))}
 
-      <div className="relative mx-auto flex max-w-4xl flex-col gap-10 rounded-[32px] border border-white/60 bg-white/70 p-6 shadow-2xl shadow-ink/10 backdrop-blur-md md:p-10">
+      <div className="relative mx-auto flex max-w-4xl flex-col gap-10 rounded-[32px] border border-white/60 bg-white p-6 shadow-2xl shadow-ink/10 backdrop-blur-md md:p-10">
         <motion.header
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -128,7 +128,7 @@ export function OnboardingPage({ onComplete }) {
               {helperText}
             </div>
             <div className="rounded-3xl border border-ink/10 bg-foam px-5 py-4 text-sm text-ink/70">
-              🔒 Your mood stays private and helps MindBridge suggest the right prompts and support.
+              Your mood stays private and helps MindBridge suggest the right prompts and support.
             </div>
             <motion.button
               type="button"
@@ -137,7 +137,7 @@ export function OnboardingPage({ onComplete }) {
               whileTap={{ scale: 0.98 }}
               className="w-full rounded-full bg-ink px-6 py-3.5 text-sm font-semibold text-cream shadow-lg shadow-ink/20 transition hover:brightness-110"
             >
-              Continue to dashboard →
+              Continue to dashboard
             </motion.button>
             <button
               type="button"

@@ -128,18 +128,18 @@
     },
     {
       "id": "a3fa2f52a25142c38f87316bec5c7335",
-      "content": "",
+      "content": "bad day\naaaa\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
       "createdAt": "2026-05-28T09:18:55.953410+00:00",
-      "updatedAt": "2026-05-29T09:24:37.071122+00:00",
+      "updatedAt": "2026-05-30T08:00:50.754823+00:00",
       "analysis": {
-        "mood": "neutral",
-        "subject": "Daily Reflection",
-        "summary": "This entry is ready for reflection.",
-        "color": "#F7B731",
-        "sentimentScore": 0,
-        "negative": false,
-        "riskLevel": "neutral",
-        "reflectionPrompt": "Name one moment today that felt steady or okay."
+        "mood": "distressed",
+        "subject": "Bad day aaaa",
+        "summary": "bad day\naaaa",
+        "color": "#F97316",
+        "sentimentScore": -4,
+        "negative": true,
+        "riskLevel": "distressed",
+        "reflectionPrompt": "What is one small thing that could make the next hour 1% easier? (Topic: Bad day aaaa)"
       }
     },
     {
