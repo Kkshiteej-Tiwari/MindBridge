@@ -12,13 +12,16 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 DATA_FILE = BASE_DIR / "data" / "journal_store.json"
 STORE_LOCK = Lock()
 
+_ANONYMOUS = "anonymous"
+
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _default_state() -> dict[str, list[dict[str, object]]]:
-    return {"entries": []}
+def _default_state() -> dict[str, object]:
+    # Structure: { "users": { "<user_id>": { "entries": [...] } } }
+    return {"users": {}}
 
 
 def _ensure_data_file() -> None:
@@ -27,16 +30,27 @@ def _ensure_data_file() -> None:
         DATA_FILE.write_text(json.dumps(_default_state(), indent=2), encoding="utf-8")
 
 
-def _read_state() -> dict[str, list[dict[str, object]]]:
+def _read_state() -> dict[str, object]:
     _ensure_data_file()
     raw = DATA_FILE.read_text(encoding="utf-8")
     if not raw.strip():
         return _default_state()
-    return json.loads(raw)
+    data = json.loads(raw)
+    # Migrate old flat format {"entries": [...]} → new per-user format
+    if "entries" in data and "users" not in data:
+        data = {"users": {_ANONYMOUS: {"entries": data["entries"]}}}
+        DATA_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    if "users" not in data:
+        data["users"] = {}
+    return data
 
 
-def _write_state(state: dict[str, list[dict[str, object]]]) -> None:
+def _write_state(state: dict[str, object]) -> None:
     DATA_FILE.write_text(json.dumps(state, indent=2), encoding="utf-8")
+
+
+def _user_entries(state: dict, user_id: str) -> list[dict[str, object]]:
+    return state["users"].setdefault(user_id, {"entries": []})["entries"]
 
 
 def _normalize_entry(entry: dict[str, object]) -> dict[str, object]:
@@ -49,23 +63,23 @@ def _normalize_entry(entry: dict[str, object]) -> dict[str, object]:
     }
 
 
-def list_entries() -> list[dict[str, object]]:
+def list_entries(user_id: str = _ANONYMOUS) -> list[dict[str, object]]:
     with STORE_LOCK:
         state = _read_state()
-        entries = [_normalize_entry(entry) for entry in state["entries"]]
+        entries = [_normalize_entry(e) for e in _user_entries(state, user_id)]
         return sorted(entries, key=lambda item: item["updatedAt"], reverse=True)
 
 
-def get_entry(entry_id: str) -> dict[str, object] | None:
+def get_entry(entry_id: str, user_id: str = _ANONYMOUS) -> dict[str, object] | None:
     with STORE_LOCK:
         state = _read_state()
-        for entry in state["entries"]:
+        for entry in _user_entries(state, user_id):
             if entry["id"] == entry_id:
                 return _normalize_entry(entry)
     return None
 
 
-def create_entry(content: str = "") -> dict[str, object]:
+def create_entry(content: str = "", user_id: str = _ANONYMOUS) -> dict[str, object]:
     with STORE_LOCK:
         state = _read_state()
         now = _now()
@@ -77,15 +91,16 @@ def create_entry(content: str = "") -> dict[str, object]:
             "updatedAt": now,
             "analysis": analysis.to_dict(),
         }
-        state["entries"].append(entry)
+        _user_entries(state, user_id).append(entry)
         _write_state(state)
         return _normalize_entry(entry)
 
 
-def update_entry(entry_id: str, content: str) -> dict[str, object]:
+def update_entry(entry_id: str, content: str, user_id: str = _ANONYMOUS) -> dict[str, object]:
     with STORE_LOCK:
         state = _read_state()
-        for index, entry in enumerate(state["entries"]):
+        entries = _user_entries(state, user_id)
+        for index, entry in enumerate(entries):
             if entry["id"] == entry_id:
                 now = _now()
                 analysis = analyze_text(content)
@@ -95,15 +110,15 @@ def update_entry(entry_id: str, content: str) -> dict[str, object]:
                     "updatedAt": now,
                     "analysis": analysis.to_dict(),
                 }
-                state["entries"][index] = updated_entry
+                entries[index] = updated_entry
                 _write_state(state)
                 return _normalize_entry(updated_entry)
 
     raise KeyError(entry_id)
 
 
-def get_history() -> list[dict[str, object]]:
-    entries = list_entries()
+def get_history(user_id: str = _ANONYMOUS) -> list[dict[str, object]]:
+    entries = list_entries(user_id)
     return [
         {
             "id": entry["id"],

@@ -47,16 +47,23 @@ BADGE_MILESTONES = {
     30: "30-day legend",
 }
 
+_ANONYMOUS = "anonymous"
+
 
 def _today() -> date:
     return datetime.now(timezone.utc).date()
 
 
-def _default_state() -> dict[str, object]:
+def _default_user_state() -> dict[str, object]:
     return {
         "completed": {},
         "progress": {"streak": 0, "xp": 0, "level": 1, "badges": [], "lastCompletedDate": None},
     }
+
+
+def _default_state() -> dict[str, object]:
+    # Structure: { "users": { "<user_id>": { completed, progress } } }
+    return {"users": {}}
 
 
 def _ensure_data_file() -> None:
@@ -70,18 +77,32 @@ def _read_state() -> dict[str, object]:
     raw = DATA_FILE.read_text(encoding="utf-8")
     if not raw.strip():
         return _default_state()
-    return json.loads(raw)
+    data = json.loads(raw)
+    # Migrate old flat format {"completed":…, "progress":…} → new per-user format
+    if "users" not in data and ("completed" in data or "progress" in data):
+        data = {"users": {_ANONYMOUS: data}}
+        DATA_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    if "users" not in data:
+        data["users"] = {}
+    return data
 
 
 def _write_state(state: dict[str, object]) -> None:
     DATA_FILE.write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
-def get_daily_state() -> tuple[list[dict[str, object]], dict[str, object]]:
+def _user_state(state: dict, user_id: str) -> dict[str, object]:
+    if user_id not in state["users"]:
+        state["users"][user_id] = _default_user_state()
+    return state["users"][user_id]
+
+
+def get_daily_state(user_id: str = _ANONYMOUS) -> tuple[list[dict[str, object]], dict[str, object]]:
     with STORE_LOCK:
         state = _read_state()
+        u = _user_state(state, user_id)
         today_key = _today().isoformat()
-        completed_today = set(state.get("completed", {}).get(today_key, []))
+        completed_today = set(u.get("completed", {}).get(today_key, []))
 
         challenges = [
             {
@@ -91,7 +112,7 @@ def get_daily_state() -> tuple[list[dict[str, object]], dict[str, object]]:
             for challenge in DEFAULT_CHALLENGES
         ]
 
-        return challenges, state["progress"]
+        return challenges, u["progress"]
 
 
 def _update_streak(progress: dict[str, object], today: date) -> None:
@@ -121,23 +142,24 @@ def _award_badges(progress: dict[str, object]) -> None:
     progress["badges"] = badges
 
 
-def complete_challenge(challenge_id: str) -> tuple[list[dict[str, object]], dict[str, object]]:
+def complete_challenge(challenge_id: str, user_id: str = _ANONYMOUS) -> tuple[list[dict[str, object]], dict[str, object]]:
     with STORE_LOCK:
         state = _read_state()
+        u = _user_state(state, user_id)
         today = _today()
         today_key = today.isoformat()
-        completed = set(state.get("completed", {}).get(today_key, []))
+        completed = set(u.get("completed", {}).get(today_key, []))
 
         if challenge_id not in completed:
             completed.add(challenge_id)
-            state.setdefault("completed", {})[today_key] = sorted(completed)
+            u.setdefault("completed", {})[today_key] = sorted(completed)
             challenge = next((item for item in DEFAULT_CHALLENGES if item["id"] == challenge_id), None)
             if challenge:
-                progress = state["progress"]
+                progress = u["progress"]
                 progress["xp"] = int(progress.get("xp", 0)) + int(challenge["xp"])
                 progress["level"] = 1 + int(progress["xp"]) // 100
                 _update_streak(progress, today)
                 _award_badges(progress)
 
         _write_state(state)
-        return get_daily_state()
+        return get_daily_state(user_id)
