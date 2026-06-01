@@ -210,6 +210,68 @@ def _fallback_reply(message: str, risk_level: str, history: list[dict[str, objec
     return _choose_response(FALLBACK_RESPONSES, last_assistant)
 
 
+def _build_gemini_contents(message: str, history: list[dict[str, object]]) -> list[dict[str, object]]:
+    contents = []
+    for item in history[-8:]:
+        role = "user" if item.get("role") == "user" else "model"
+        content = str(item.get("content", ""))
+        if content:
+            contents.append({"role": role, "parts": [{"text": content}]})
+    contents.append({"role": "user", "parts": [{"text": message}]})
+    return contents
+
+
+def _generate_reply_gemini(message: str, history: list[dict[str, object]], api_key: str, model_name: str) -> str:
+    import httpx
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+    contents = _build_gemini_contents(message, history)
+    payload = {
+        "contents": contents,
+        "systemInstruction": {
+            "parts": [{"text": SYSTEM_PROMPT}]
+        },
+        "generationConfig": {
+            "temperature": 0.4
+        }
+    }
+    resp = httpx.post(url, json=payload, timeout=15.0)
+    resp.raise_for_status()
+    data = resp.json()
+    try:
+        return data["candidates"][0]["content"]["parts"][0]["text"]
+    except (KeyError, IndexError):
+        raise ValueError("Invalid Gemini response structure")
+
+
+def _stream_reply_chunks_gemini(message: str, history: list[dict[str, object]], api_key: str, model_name: str):
+    import httpx
+    import json
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:streamGenerateContent?alt=sse&key={api_key}"
+    contents = _build_gemini_contents(message, history)
+    payload = {
+        "contents": contents,
+        "systemInstruction": {
+            "parts": [{"text": SYSTEM_PROMPT}]
+        },
+        "generationConfig": {
+            "temperature": 0.4
+        }
+    }
+    with httpx.stream("POST", url, json=payload, timeout=15.0) as response:
+        response.raise_for_status()
+        for line in response.iter_lines():
+            if line.startswith("data: "):
+                data_str = line[6:].strip()
+                if not data_str:
+                    continue
+                try:
+                    data = json.loads(data_str)
+                    delta_text = data["candidates"][0]["content"]["parts"][0]["text"]
+                    yield delta_text
+                except Exception:
+                    pass
+
+
 def generate_reply(message: str, session_id: str | None = None, history: list[object] | None = None) -> dict[str, object]:
     if not session_id:
         session_id = create_session()["id"]
@@ -226,9 +288,19 @@ def generate_reply(message: str, session_id: str | None = None, history: list[ob
     else:
         base_history = get_session_messages(session_id)
 
-    client = _openai_client()
     reply_text = ""
-    if client and risk_level != "crisis":
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    client = _openai_client()
+
+    if risk_level == "crisis":
+        reply_text = _fallback_reply(message, risk_level, base_history)
+    elif gemini_key:
+        try:
+            gemini_model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+            reply_text = _generate_reply_gemini(message, base_history, gemini_key, gemini_model)
+        except Exception:
+            reply_text = _fallback_reply(message, risk_level, base_history)
+    elif client and risk_level != "crisis":
         model_name = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         prompt_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
         prompt_messages.extend(_build_history(base_history))
@@ -277,10 +349,25 @@ def stream_reply_chunks(message: str, session_id: str | None = None, history: li
     else:
         base_history = get_session_messages(session_id)
 
-    client = _openai_client()
     reply_text = ""
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    client = _openai_client()
 
-    if client and risk_level != "crisis":
+    if risk_level == "crisis":
+        reply_text = _fallback_reply(message, risk_level, base_history)
+        for word in reply_text.split():
+            yield {"type": "delta", "text": word + " "}
+    elif gemini_key:
+        try:
+            gemini_model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+            for chunk in _stream_reply_chunks_gemini(message, base_history, gemini_key, gemini_model):
+                reply_text += chunk
+                yield {"type": "delta", "text": chunk}
+        except Exception:
+            reply_text = _fallback_reply(message, risk_level, base_history)
+            for word in reply_text.split():
+                yield {"type": "delta", "text": word + " "}
+    elif client and risk_level != "crisis":
         model_name = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         prompt_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
         prompt_messages.extend(_build_history(base_history))
