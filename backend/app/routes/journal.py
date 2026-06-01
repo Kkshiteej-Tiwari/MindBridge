@@ -10,7 +10,7 @@ from ..models.journal import (
     JournalResponse,
     JournalUpdateRequest,
 )
-from ..services.store import create_entry, get_history, get_entry, list_entries, update_entry
+from ..services.store import create_entry, get_history, get_entry, list_entries, update_entry, delete_entry
 
 router = APIRouter(prefix="/journal", tags=["journal"])
 
@@ -64,3 +64,16 @@ def patch_journal_entry(
     except KeyError as exc:
         raise HTTPException(status_code=404, detail="Journal entry not found") from exc
     return JournalResponse(data=entry)
+
+
+@router.delete("/{entry_id}", status_code=status.HTTP_200_OK)
+def delete_journal_entry(
+    entry_id: str,
+    x_user_id: str | None = Header(default=None),
+) -> dict:
+    try:
+        delete_entry(entry_id, _uid(x_user_id))
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail="Journal entry not found") from exc
+    return {"ok": True}
+

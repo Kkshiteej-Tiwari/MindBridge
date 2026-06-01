@@ -114,6 +114,15 @@ def update_entry(entry_id: str, content: str, user_id: str = _ANONYMOUS) -> dict
                 _write_state(state)
                 return _normalize_entry(updated_entry)
 
+def delete_entry(entry_id: str, user_id: str = _ANONYMOUS) -> None:
+    with STORE_LOCK:
+        state = _read_state()
+        entries = _user_entries(state, user_id)
+        for index, entry in enumerate(entries):
+            if entry["id"] == entry_id:
+                entries.pop(index)
+                _write_state(state)
+                return
     raise KeyError(entry_id)
 
 

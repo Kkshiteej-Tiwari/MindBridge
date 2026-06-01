@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { createEntry, fetchEntries, fetchHistory, updateEntry } from "../services/journalApi";
+import { createEntry, fetchEntries, fetchHistory, updateEntry, deleteEntry } from "../services/journalApi";
 
 export function useJournalFeature() {
   const [entries, setEntries] = useState([]);
@@ -88,6 +88,33 @@ export function useJournalFeature() {
     }
   }, []);
 
+  const removeEntry = useCallback(async (entryId) => {
+    setSaving(true);
+    setError("");
+
+    try {
+      await deleteEntry(entryId);
+      const refreshedEntries = await fetchEntries();
+      const refreshedHistory = await fetchHistory();
+      setEntries(refreshedEntries);
+      setHistory(refreshedHistory);
+
+      if (refreshedEntries.length > 0) {
+        setActiveId(refreshedEntries[0].id);
+      } else {
+        const newDraft = await createEntry();
+        const finalEntries = await fetchEntries();
+        setEntries(finalEntries);
+        setActiveId(newDraft.id);
+      }
+    } catch (deleteError) {
+      setError(deleteError.message || "Unable to delete the journal entry.");
+      throw deleteError;
+    } finally {
+      setSaving(false);
+    }
+  }, []);
+
   return {
     activeEntry,
     activeId,
@@ -98,6 +125,7 @@ export function useJournalFeature() {
     loading,
     refresh,
     saveEntry,
+    removeEntry,
     saving,
     selectEntry,
     setEntries,

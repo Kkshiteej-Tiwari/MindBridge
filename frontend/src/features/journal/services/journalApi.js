@@ -24,3 +24,10 @@ export async function updateEntry(entryId, content) {
 export async function fetchHistory() {
   return request("/journal/history");
 }
+
+export async function deleteEntry(entryId) {
+  return request(`/journal/${entryId}`, {
+    method: "DELETE",
+  });
+}
+

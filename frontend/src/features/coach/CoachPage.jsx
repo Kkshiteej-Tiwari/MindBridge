@@ -337,17 +337,19 @@ export function CoachPage() {
             </button>
           </form>
 
-          <button
-            type="button"
-            onClick={() => window.location.assign("/sos")}
-            className={`absolute -bottom-5 right-6 rounded-full px-4 py-2 text-xs font-semibold text-cream shadow-lg transition ${
-              crisisActive
-                ? "bg-coral shadow-coral/40 sos-pulse"
-                : "bg-coral/80 shadow-coral/20 hover:bg-coral"
-            }`}
-          >
-            🆘 SOS resources
-          </button>
+          <div className="mt-4 flex justify-end">
+            <button
+              type="button"
+              onClick={() => window.location.assign("/sos")}
+              className={`rounded-full px-4 py-2 text-xs font-semibold text-white shadow-lg transition ${
+                crisisActive
+                  ? "bg-coral shadow-coral/40 sos-pulse"
+                  : "bg-coral/80 shadow-coral/20 hover:bg-coral"
+              }`}
+            >
+              🆘 SOS resources
+            </button>
+          </div>
         </div>
 
         <aside className="space-y-5">
