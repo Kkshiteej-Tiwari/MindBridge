@@ -203,7 +203,8 @@ def _fallback_reply(message: str, risk_level: str, history: list[dict[str, objec
     if "thanks" in normalized or "thank" in normalized:
         return "You are welcome. I am here with you. What else would help right now?"
 
-    if "hi" == normalized or normalized.startswith("hello"):
+    GREETINGS_RE = r"\b(hi|hello|hey|hola|yo|hey there|hi there|greetings|good morning|good afternoon|good evening|greeting)\b"
+    if re.search(GREETINGS_RE, normalized):
         return "Hi. I am here with you. What is on your mind today?"
 
     return _choose_response(FALLBACK_RESPONSES, last_assistant)
