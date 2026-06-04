@@ -111,6 +111,4 @@ The backend exposes modular routes for:
 - The deployed dashboard is available at the live URL above.
 - The frontend router is configured with `BrowserRouter`, so direct navigation to `/dashboard` works in the deployed app.
 
-## Suggested Commit Message
 
-- `Add README with deployed dashboard link`
